@@ -5,7 +5,9 @@ const fs = require("fs");
 const path = require("path");
 
 const sequelize = new Sequelize(
-  `postgresql://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}`
+  `postgresql://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}`, {
+    logging: false
+  }
 );
 
 const basename = path.basename(__filename);

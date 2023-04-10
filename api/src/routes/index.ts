@@ -1,6 +1,7 @@
 import { Router } from "express";
-// import rifaRoute from "./rifaRoute";
+import alarmRoutes from "./alarmRoute";
 const routes = Router();
 
-// routes.use("/api/rifa", rifaRoute);
+routes.use("/api/alarm", alarmRoutes);
+
 export default routes;
