@@ -1,7 +1,6 @@
 import { Router, Request, Response } from "express";
 import { createAlarm } from "./controllers/alarmController";
-// const rolType1: string = process.env.ROL_TYPE1 as string;
-// const rolType2: string = process.env.ROL_TYPE2 as string;
+const {createAlarmValidate} = require("../validators/alarmValidator");
 const route = Router();
 
 
@@ -16,12 +15,12 @@ const route = Router();
 // });
 // 
 
-route.post("/createalarm", async (req: Request, res: Response) => {
+route.post("/createalarm", createAlarmValidate, async (req: Request, res: Response) => {
     const  {body } = req;
     try {
         const result = await createAlarm(body);
           
-
+        console.log("result", result);
         res.status(200).send(result);
     } catch (error: any) {
         res.status(400).send(error.message);

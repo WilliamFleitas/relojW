@@ -33,10 +33,8 @@ let capsEntries = entries.map((entry) => [
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-// sequelize?.models?.User.hasMany(sequelize?.models?.TicketDetail);
-// sequelize?.models?.TicketDetail.belongsTo(sequelize?.models?.Rifa)
-// sequelize?.models?.Rifa.hasMany(sequelize?.models?.TicketDetail); 
-
+sequelize?.models?.User.hasMany(sequelize?.models?.Alarm);
+sequelize?.models?.Alarm.belongsTo(sequelize?.models?.User); 
 
 
 module.exports = {
