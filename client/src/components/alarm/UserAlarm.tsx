@@ -6,16 +6,19 @@ export const UserAlarm = () => {
   const daysOfWeek = ["D", "L", "M", "M", "J", "V", "S"];
   const dispatch = useAppDispatch();
   const alarmList = useAppSelector((state) => state.alarm.alarmList);
-  const { id } = useAppSelector((state) => state.user.user);
-  console.log(alarmList);
+  const { user } = useAppSelector((state) => state.user);
+  
 
   useEffect(() => {
-    dispatch(getUserAlarms(id));
-  }, [dispatch, id]);
+    if(user?.id){
+      dispatch(getUserAlarms(user.id));
+
+    }
+  }, [dispatch, user?.id]);
 
   return (
-    <div className="items-center justify-center text-center text-[#2C2A2A]">
-      <div className="h-[400px] overflow-auto overflow-x-hidden p-2">
+    <div className=" items-center justify-center text-center text-[#2C2A2A]">
+      <div className="no-scrollbar h-[400px] overflow-auto overflow-x-hidden p-2">
         {alarmList.length ? (
           alarmList.map((e) => {
             return (

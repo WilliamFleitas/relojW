@@ -20,7 +20,6 @@ route.post("/createalarm", createAlarmValidate, async (req: Request, res: Respon
     try {
         const result = await createAlarm(body);
           
-        console.log("result", result);
         res.status(200).send(result);
     } catch (error: any) {
         res.status(400).send(error.message);

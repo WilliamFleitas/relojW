@@ -67,8 +67,8 @@ export const CreateAlarm = () => {
   };
   const daysOfWeek = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
 
-  const { id } = useAppSelector((state) => state.user.user);
-  console.log("iduser", id);
+  const { user} = useAppSelector((state) => state.user);
+  console.log("iduser", user?.id);
   const [customDays, setCustomDays] = useState<days>(customDaysObject);
   const [arrayDays, setArrayDays] = useState<number[]>([]);
   const [alarmOnce, setAlarmOnce] = useState<boolean>(true);
@@ -131,11 +131,11 @@ export const CreateAlarm = () => {
       hour,
       description,
       alarmDays: arrayDays,
-      userId: id
+      userId: user?.id
     }
     axios.post(`${BackUrl}/api/alarm/createalarm`, newObj).then((result) => {
       console.log("resultcreatealarm", result);
-      dispatch(getUserAlarms(id as string));
+      dispatch(getUserAlarms(user?.id as string));
     }).catch((err) => {
       console.log("createalarmerror", err);
     });

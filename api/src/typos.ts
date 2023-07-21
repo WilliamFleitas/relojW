@@ -11,7 +11,7 @@
 export interface userType {
     username: string;
     password: string;
-    privilege: "none" | "user" | "king"
+    role: "none" | "user" | "admin";
     id: string;
 }
 
@@ -22,3 +22,23 @@ export interface alarmType {
     description: string;
     alarmDays: string;
 }
+
+export interface ServerToClientEvents {
+    noArg: () => void;
+    basicEmit: (a: number, b: string, c: Buffer) => void;
+    withAck: (d: string, callback: (e: number) => void) => void;
+  }
+  
+  export interface ClientToServerEvents {
+    hello: () => void;
+  }
+  
+  export interface InterServerEvents {
+    ping: () => void;
+  }
+  
+  export interface SocketData {
+    name: string;
+    age: number;
+  }
+

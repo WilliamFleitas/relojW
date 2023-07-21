@@ -17,9 +17,8 @@ export const getUserAlarms = (id: string) => (dispatch : AppDispatch) => {
                 "auth-token":`${session}`
             },
         }).then(({data}) => {
-            dispatch(setAlarmData(data));
+            dispatch(setAlarmData(data.alarms));
         }).catch((e: any) => {
-            console.log("error", e);
             dispatch(setError(e.message));
         }).finally(() => {
             dispatch(setLoadingAlarm(false));

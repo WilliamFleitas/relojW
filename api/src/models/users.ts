@@ -18,10 +18,14 @@ module.exports = (sequelize: any) => {
         type: DataTypes.STRING,
         allowNull: false
       },
-      privilege: {
+      role: {
         type: DataTypes.ENUM("none", "user", "admin"),
         allowNull: false,
-        defaultValue: "none"
+        defaultValue: "user"
+      },
+      is_admin: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
       }
     },
     

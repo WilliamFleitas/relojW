@@ -43,8 +43,9 @@ export const Signin = () => {
        
         setLoginErrors("");
         axios.post(`${BackUrl}/api/auth/signin`, formData ).then(({data}) => {
-          
+          console.log("inicio",data)
           localStorage.setItem("userSession", JSON.stringify(data.token));
+          
           window.location.replace("/home");
           
       }).catch((e: any) =>{

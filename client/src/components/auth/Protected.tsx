@@ -11,12 +11,11 @@ const Protected = ({ children }: IProtectedProps) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const session = window.localStorage.getItem("userSession");
     setDisplay(false)
-    if (session) {
         getUserCall()
         .then(({data}) => {
-            if(data.privilege === "user" || data.privilege === "admin"){
+          console.log("getuser", data);
+            if(data.role === "user" || data.role === "admin"){
                 setDisplay(true);
             }else{
                 localStorage.removeItem("userSession");
@@ -27,10 +26,8 @@ const Protected = ({ children }: IProtectedProps) => {
           localStorage.removeItem("userSession");
           navigate("/login");
         });
-    }else{
-      navigate('/login')
-    }
-  }, [setDisplay, navigate]);
+    
+  }, [setDisplay]);
 
   return <>{display ? children : <h1>Cargando..</h1> }</>;
 };
