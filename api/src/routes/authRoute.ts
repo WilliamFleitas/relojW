@@ -11,12 +11,13 @@ const route = Router();
 
 route.post("/signup", createUserValidate, async (req: Request, res: Response) => {
     const { body } = req;
-    
+    console.log(body);
     try {
         const result = await signUp(body);
        
         res.status(200).send(result);
     } catch (error: any) {
+        console.log(error);
         res.status(500).send(error.message);
     }
 
@@ -25,7 +26,6 @@ route.post("/signup", createUserValidate, async (req: Request, res: Response) =>
 route.post("/signin", signUserValidate,  async (req: Request, res: Response) => {
  const { body } = req;
  
-
     try {
         const result = await signIn(body);
         if(!result.objUser.id || !result.token){
@@ -44,7 +44,6 @@ route.post("/signin", signUserValidate,  async (req: Request, res: Response) => 
 
 route.get("/profile", tokenValidation, checkRoleAuth(rolType1, rolType2),  async (req: Request, res: Response) => {
 
-    
     try {
         const result = await profile(req.userId);
         if(!result){

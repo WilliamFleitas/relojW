@@ -3,23 +3,20 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export interface IUserType {
     username: string;
     id: string;
-    privilege: string;
+    role: string;
 }
 
 export interface UserStateType {
-    user: IUserType;
-    loading: Boolean;
-    userRol: string;
+    user: IUserType | null;
+    loading: boolean;
+    
+    webSocket: boolean
 };
 
 const initialState: UserStateType = {
-    user: {
-      username: "",
-      id: "",
-      privilege: ""
-    },
+    user: null,
+    webSocket: false,
     loading: false,
-    userRol: ""
 };
 
 const UserSlice = createSlice({
@@ -27,28 +24,19 @@ const UserSlice = createSlice({
     initialState,
     reducers: {
         setDataUser(state, action: PayloadAction<IUserType>){
-            state.user.username = action.payload.username;
-            state.user.id = action.payload.id;
-            state.user.privilege = action.payload.privilege;
+            state.user = action.payload;
+        },
+        setUserSocket(state, action: PayloadAction<boolean>){
+            state.webSocket = action.payload;
         },
         clearDataUser(state){
-            state.user = {
-                username: "",
-                id: "",
-                privilege: ""
-            };
+            state.user = null
         },
-        setLoadingUser(state, action: PayloadAction<Boolean>){
+        setLoadingUser(state, action: PayloadAction<boolean>){
             state.loading = action.payload
         },
-        userRoll(state, action: PayloadAction<string>){
-            state.userRol = action.payload
-        },
-        clearUserRoll(state){
-            state.userRol = ""
-        }
     }
 });
 
 export default UserSlice.reducer;
-export const {setDataUser, clearDataUser, setLoadingUser, userRoll, clearUserRoll}= UserSlice.actions;
+export const {setDataUser, setUserSocket, clearDataUser, setLoadingUser, }= UserSlice.actions;

@@ -20,7 +20,7 @@ export const checkRoleAuth = (rolType1:string, rolType2: string) => async (req: 
          }
      });
      
-     if(userData.privilege === rolType1 || userData.privilege === rolType2){
+     if(userData.role === rolType1 || userData.role === rolType2){
          next();
      }
      else{
@@ -47,7 +47,7 @@ export const checkRoleAdmin = (rolType1:string) => async (req: Request, res: Res
         }
     });
     
-    if(userData.privilege === rolType1){
+    if(userData.role === rolType1){
         next();
     }
     else{

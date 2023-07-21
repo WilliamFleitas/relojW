@@ -33,10 +33,13 @@ let capsEntries = entries.map((entry) => [
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-sequelize?.models?.User.hasMany(sequelize?.models?.Alarm);
-sequelize?.models?.Alarm.belongsTo(sequelize?.models?.User); 
+// sequelize?.models?.User.hasMany(sequelize?.models?.Alarm);
+// sequelize?.models?.Alarm.belongsTo(sequelize?.models?.User); 
 
-
+sequelize.models.User.hasMany(sequelize?.models?.Alarm, {
+  foreignKey: "userId",
+  as: "alarms",
+});
 module.exports = {
   sequelize,
   ...sequelize.models,

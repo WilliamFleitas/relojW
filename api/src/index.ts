@@ -1,8 +1,10 @@
 import express, { NextFunction, Request, Response } from "express";
 import routes from "./routes/index";
-import  enviarNotificacion  from "./cronUtil/cronWatcher";
+import conWatcher from "./cronUtil/cronWatcher";
 import cookieParser from "cookie-parser";
-const cors = require('cors');
+import { Server } from "socket.io";
+const http = require("http");
+const cors = require("cors");
 require("dotenv").config();
 
 const { sequelize } = require("./database");
@@ -12,6 +14,12 @@ const PORT = process.env.PORT;
 
 //creamos el servidor
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "http://127.0.0.1:5173",
+  },
+});
 app.use(cors());
 //middlewares
 
@@ -30,13 +38,49 @@ app.use(cookieParser());
 app.use(express.json()); // transforma la req.body a un objeto
 
 app.use(morgan("dev"));
-enviarNotificacion();
+
+
 app.use("/", routes);
-//acordarse de poner el force true
+let userToSocketMap = new Map();
+
+io.on("connection", (socket) => {
+  // Eventos del socket
+  socket.on("dataUser", (datos) => {
+    if (datos.userId ) {
+      console.log("Nuevo cliente conectado");
+      console.log("Datos recibidos:", datos);
+      const userId = datos.userId;
+      conWatcher(userId, socket.id);
+      // Guardar la asociación entre el ID de usuario y el ID de socket
+      userToSocketMap.set(userId, socket.id);
+      // Realizar operaciones adicionales relacionadas con el ID de usuario
+      // // ...
+      socket.emit("evento", datos);
+    }
+  });
+  socket.on("disconnect", () => {
+    // Buscar el ID de usuario asociado con el ID de socket y eliminar la entrada
+    const userId = getUserBySocketId(socket.id);
+    if (userId) {
+      userToSocketMap.delete(userId);
+      console.log("Cliente desconectado");
+    }
+  });
+});
+
+function getUserBySocketId(socketId: any) {
+  for (const [userId, id] of userToSocketMap.entries()) {
+    if (id === socketId) {
+      return userId;
+    }
+  }
+  return null;
+}
+
 sequelize
-  .sync({ })
+  .sync({})
   .then(() => {
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log("Database connected");
       console.log("Server running ok");
     });
@@ -44,3 +88,4 @@ sequelize
   .catch((error: any) => {
     console.log("No se pudo conectar a la DB ", error);
   });
+  export { io };

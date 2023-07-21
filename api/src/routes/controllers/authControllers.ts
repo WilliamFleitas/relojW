@@ -54,6 +54,7 @@ export const signIn = async (body: userType) => {
         } else {
           const id = findUser.id;
           const username = findUser.username;
+          const privilege = findUser.role;
           const userForToken = { id, username };
           const token: string = await jwt.sign(
             userForToken,
@@ -64,7 +65,7 @@ export const signIn = async (body: userType) => {
           const objUser = {
             username: username,
             id: id,
-            privilege: findUser.privilege
+            privilege: privilege
           }
           return { token, objUser };
         }

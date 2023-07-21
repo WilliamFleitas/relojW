@@ -18,6 +18,9 @@ module.exports = (sequelize: any) => {
         type: DataTypes.STRING,
         allowNull: false
       },
+      iaMessage: {
+        type: DataTypes.TEXT,
+      },
       alarmDays: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         allowNull: false
