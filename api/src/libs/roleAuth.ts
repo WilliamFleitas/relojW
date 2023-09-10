@@ -7,10 +7,10 @@ const {User} = require("../database");
 export const checkRoleAuth = (rolType1:string, rolType2: string) => async (req: Request, res: Response, next: NextFunction) => {
 
    try {
-    //  const token = req.cookies.token;
+    
      const token = req.header("auth-token"); 
      if(!token){
-      res.status(404).send("Token invalido.");
+      res.status(404).send("Invalid Token.");
      }
      const tokenData = await  jwt.verify(token?.toString(), process.env.TOKEN_SECRET as string) as  payloadType;
      
@@ -24,7 +24,7 @@ export const checkRoleAuth = (rolType1:string, rolType2: string) => async (req: 
          next();
      }
      else{
-         res.status(409).send({error: 'Acceso denegado por permisos'})
+         res.status(409).send({error: 'You do not have access permissions'})
      }
    } catch (error) {
      res.status(400).send(error);
@@ -34,10 +34,10 @@ export const checkRoleAuth = (rolType1:string, rolType2: string) => async (req: 
 export const checkRoleAdmin = (rolType1:string) => async (req: Request, res: Response, next: NextFunction) => {
 
   try {
-    // const token = req.cookies.token;
+    
     const token = req.header("auth-token"); 
     if(!token){
-     res.status(404).send("Token invalido.");
+     res.status(404).send("Invalid Token.");
     }
     const tokenData = await  jwt.verify(token?.toString(), process.env.TOKEN_SECRET as string) as  payloadType;
     
@@ -51,7 +51,7 @@ export const checkRoleAdmin = (rolType1:string) => async (req: Request, res: Res
         next();
     }
     else{
-        res.status(409).send({error: 'Acceso denegado por permisos'})
+        res.status(409).send({error: 'You do not have access permissions'})
     }
   } catch (error) {
     res.status(400).send(error);

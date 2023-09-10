@@ -1,37 +1,31 @@
-import {Router, Request, Response } from "express";
-const {User, Alarm} = require("../database");
 
+import { Router, Request, Response } from "express";
+const { Alarm, sequelize } = require("../database");
 const route = Router();
 
-
-
 route.get("/useralarm/:id", async (req: Request, res: Response) => {
-  const {id} = req.params;
-
+  const { id } = req.params;
   try {
-    const result = await User.findByPk(id, {
-
-      include: [{ model: Alarm, as: "alarms" }],
+    const currentDate = new Date();
+    const currentTimeString = currentDate.toLocaleTimeString('en-US', { hour12: false });
+  
+    const result = await Alarm.findAll({
+      where: {
+        userId: id,
+      },
+      attributes: {
+        exclude: ["iaVideo", "iaMessage"],
+      },
+      order: [
+        [sequelize.literal(`ABS(EXTRACT(EPOCH FROM (hour::time - '${currentTimeString}'))) DESC`)],
+      ],
     });
-    res.status(200).send(result);  
+    console.log("result", result);
+    res.status(200).send(result);
   } catch (error: any) {
-    console.log("error", error)
-      res.status(400).send(error);
+    console.log("error", error);
+    res.status(400).send(error);
   }
 });
-
-// route.post("/verify", async (req: Request, res: Response) => {
-//   const {body} = req;
-
-//   try {
-//     const result = await Alarm.findAll(
-//       {
-//         where: {UserId: body.id}
-//       });
-//     res.status(200).send(result);  
-//   } catch (error: any) {
-//       res.status(400).send(error);
-//   }
-// });
 
 export default route;

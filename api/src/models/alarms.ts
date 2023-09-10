@@ -4,7 +4,7 @@ module.exports = (sequelize: any) => {
   sequelize.define(
     "Alarm",
     {
-      // Model attributes are defined here
+      
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
@@ -20,11 +20,16 @@ module.exports = (sequelize: any) => {
       },
       iaMessage: {
         type: DataTypes.TEXT,
+        allowNull: true
       },
       alarmDays: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         allowNull: false
-      }
+      },
+      iaVideo: {
+        type: DataTypes.BLOB,
+        allowNull: true
+      },
     },
     
     {

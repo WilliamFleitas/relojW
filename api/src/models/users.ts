@@ -4,7 +4,7 @@ module.exports = (sequelize: any) => {
   sequelize.define(
     "User",
     {
-      // Model attributes are defined here
+      
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,

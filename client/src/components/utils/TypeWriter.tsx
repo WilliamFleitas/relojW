@@ -10,18 +10,19 @@ export const Typewriter = ({ text }: TypeWriterTypeProps) => {
   useEffect(() => {
     let currentIndex = 0;
     const interval = setInterval(() => {
-      setVisibleText((prevText) => prevText + text[currentIndex]);
+      
       currentIndex++;
+      setVisibleText((prevText) => prevText + text[currentIndex]);
       if (currentIndex === text.length) {
         clearInterval(interval);
       }
-    }, 100); // Intervalo de tiempo entre cada letra (ajusta según tus necesidades)
+    }, 60); // Intervalo de tiempo entre cada letra (ajusta según tus necesidades)
 
     return () => {
       clearInterval(interval);
     };
   }, [text]);
 
-  return <div style={{  height: "200px", overflow: "hidden" }} className="typewriter ">{visibleText}</div>;
+  return <div style={{  height: "100%", overflow: "hidden" }} className="typewriter min-w-screen">{visibleText}</div>;
 };
 

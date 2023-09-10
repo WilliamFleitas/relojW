@@ -2,7 +2,6 @@ import { Router } from "express";
 import alarmRoutes from "./alarmRoute";
 import authRoutes from "./authRoute";
 import userRoutes from "../routes/userRoute";
-
 const routes = Router();
 
 routes.use("/api/alarm", alarmRoutes);

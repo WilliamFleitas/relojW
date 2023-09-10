@@ -9,17 +9,17 @@ export const AlarmLayout = () => {
       <Chroni />
 
       
-        <div className="relative flex flex-row pt-20 items-center justify-center text-center m-auto p-5">
+        <div className=" flex flex-row pt-14 items-center justify-between text-center p-5 gap-x-4">
 
-          <div className=" m-auto">
+          <div className=" w-full m-auto">
             <CreateAlarm />
           </div>
 
-          <div className="w-[2px]">
-           <p className=" bg-white h-[400px] w-1 m-auto"></p>
+          <div className="">
+           <p className=" bg-zinc-800 rounded-full h-[70vh] w-2 "></p>
           </div>
 
-          <div className=" m-auto ">
+          <div className="w-full ">
             <UserAlarm />
           </div>
         </div>

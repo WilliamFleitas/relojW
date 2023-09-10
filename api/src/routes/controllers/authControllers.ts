@@ -10,7 +10,7 @@ export const signUp = async (body: userType) => {
       where: { username: body.username },
     });
     if (findUsername) {
-        throw new Error("Usuario no disponible");
+        throw new Error("User unavailable");
     } 
     else {
       const password: Promise<string> = await bcrypt.hashSync(
@@ -27,7 +27,7 @@ export const signUp = async (body: userType) => {
       if (result) {
         return result;
       } else {
-        throw new Error("no se pudo crear el usuario");
+        throw new Error("There was an error creating the user");
       }
     }
   } catch (error: any) {
@@ -43,14 +43,14 @@ export const signIn = async (body: userType) => {
         where: { username: body.username },
       });
       if (!findUser ) {
-        throw new Error("Usuario no encontrado");
+        throw new Error("The username or password you entered is incorrect");
       } 
         const validateBcrypt: Promise<boolean> = await bcrypt.compare(
           body.password,
           findUser.password
         );
         if (!validateBcrypt ) {
-          throw new Error("Contraseña invalida");
+          throw new Error("The username or password you entered is incorrect");
         } else {
           const id = findUser.id;
           const username = findUser.username;
@@ -82,7 +82,7 @@ export const profile = async (userId: string) => {
         }
     });
     if(!user){
-        throw new Error("No se encontro el usuario!")
+        throw new Error("The user was not found")
     }
     else {
         return user;

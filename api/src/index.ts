@@ -12,7 +12,7 @@ const morgan = require("morgan");
 const FRONT_URL = process.env.FRONT_URL;
 const PORT = process.env.PORT;
 
-//creamos el servidor
+
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -21,11 +21,11 @@ const io = new Server(server, {
   },
 });
 app.use(cors());
-//middlewares
 
-//Admitir llamados del front
+
+
 app.use((_req: Request, res: Response, next: NextFunction) => {
-  res.header("Access-Control-Allow-Origin", FRONT_URL); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Origin", FRONT_URL); 
   res.header("Access-Control-Allow-Credentials", "true");
   res.header(
     "Access-Control-Allow-Headers",
@@ -44,26 +44,24 @@ app.use("/", routes);
 let userToSocketMap = new Map();
 
 io.on("connection", (socket) => {
-  // Eventos del socket
+  
   socket.on("dataUser", (datos) => {
     if (datos.userId ) {
-      console.log("Nuevo cliente conectado");
-      console.log("Datos recibidos:", datos);
+      console.log("New client conect");
+      console.log("Data received:", datos);
       const userId = datos.userId;
-      conWatcher(userId, socket.id);
-      // Guardar la asociación entre el ID de usuario y el ID de socket
+       conWatcher(userId, socket.id);
       userToSocketMap.set(userId, socket.id);
-      // Realizar operaciones adicionales relacionadas con el ID de usuario
-      // // ...
+      
       socket.emit("evento", datos);
     }
   });
   socket.on("disconnect", () => {
-    // Buscar el ID de usuario asociado con el ID de socket y eliminar la entrada
+    
     const userId = getUserBySocketId(socket.id);
     if (userId) {
       userToSocketMap.delete(userId);
-      console.log("Cliente desconectado");
+      console.log("Client disconnected");
     }
   });
 });
@@ -86,6 +84,7 @@ sequelize
     });
   })
   .catch((error: any) => {
-    console.log("No se pudo conectar a la DB ", error);
+    console.log("Could not connect to DB ", error);
   });
-  export { io };
+  
+  export { io  };

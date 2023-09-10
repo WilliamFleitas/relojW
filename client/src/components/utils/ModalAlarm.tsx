@@ -10,7 +10,7 @@ interface ModalProps {
   primaryButton?: React.ReactNode;
   secondaryButton?: React.ReactNode;
 }
-export default function Modal({Content, isOpen, onClose, header, icon, primaryButton, secondaryButton}:ModalProps) {
+export default function ModalAlarm({Content, isOpen, onClose, header, icon, primaryButton, secondaryButton}:ModalProps) {
   const [open, setOpen] = useState(false);
 
   const cancelButtonRef = useRef(null);
@@ -46,7 +46,7 @@ export default function Modal({Content, isOpen, onClose, header, icon, primaryBu
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform w-screen h-screen overflow-hidden bg-[#242323] text-white transition-all p-5 flex flex-col text-center items-center justify-center">
+              <Dialog.Panel className="relative  transform w-screen h-screen  bg-[#1f1e1f] text-white transition-all flex flex-col p-10">
                 <div className=" ">
                   <Dialog.Title className={"pb-2 flex flex-row text-center justify-center gap-x-2 items-center "}>
                     
