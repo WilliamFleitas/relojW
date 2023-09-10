@@ -29,10 +29,8 @@ route.post("/signin", signUserValidate,  async (req: Request, res: Response) => 
     try {
         const result = await signIn(body);
         if(!result.objUser.id || !result.token){
-          res.status(400).send("Email o contraseña incorrecta")
+          res.status(400).send("The username or password you entered is incorrect")
         }else{
-            // res.status(200).cookie("token", result.token, {httpOnly: true, secure: true, sameSite: 'strict' }).send({data: result.objUser});
-            
             res.status(200).send({data: result.objUser, token: result.token});
         }
     } catch (error: any) {
@@ -47,7 +45,7 @@ route.get("/profile", tokenValidation, checkRoleAuth(rolType1, rolType2),  async
     try {
         const result = await profile(req.userId);
         if(!result){
-            res.status(400).send("No se encontro el usuario");
+            res.status(400).send("The user was not found");
         }
         else{
         res.status(200).send(result);

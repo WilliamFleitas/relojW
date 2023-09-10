@@ -10,7 +10,7 @@ import Protected from "./components/auth/Protected";
 import NavBar from "./components/navbar/NavBar";
 import { io } from "socket.io-client";
 import { AlarmScreen } from "./components/alarm/AlarmScreen";
-import Modal from "./components/utils/Modal";
+import ModalAlarm from "./components/utils/ModalAlarm";
 const socket = io("http://localhost:3001");
 
 interface userDataTypes {
@@ -18,6 +18,7 @@ interface userDataTypes {
   description: string;
   hour: string;
   iaMessage: string;
+  iaVideo: Blob;
 };
 const App = () => {
 
@@ -84,11 +85,12 @@ const App = () => {
       } */}
       { 
       alarmMessage ? 
-        <Modal
+        <ModalAlarm
         isOpen={alarmSwitch}
         onClose={setAlarmSwitch}
         header={"Alarm"}
         Content={<AlarmScreen 
+        iaVideo={alarmMessage.iaVideo}
         iaMessage={alarmMessage.iaMessage}
         description={alarmMessage.description}
         data={alarmMessage.data}

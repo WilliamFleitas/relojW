@@ -10,11 +10,11 @@ export interface payloadType {
 export const tokenValidation = async (req: Request, res: Response, next: NextFunction) => {
 
 try {
-    // const token = req.cookies.token; 
+   
     const token = req.header("auth-token"); 
     
  if(!token) {
-    res.status(401).send("Token invalido");
+    res.status(401).send("Invalid Token.");
 }
  else{
  const payloadToken = await  jwt.verify(token, process.env.TOKEN_SECRET) as  payloadType;
