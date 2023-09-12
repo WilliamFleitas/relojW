@@ -27,3 +27,22 @@ export const getUserAlarms = (id: string) => (dispatch : AppDispatch) => {
     }
     
 };
+
+export const updateEnableAlarm = (id:string, enableAlarma: boolean) => (dispatch : AppDispatch) => {
+    
+   const session = JSON.parse(window.localStorage.getItem("userSession") as string);
+   if(!session){
+      return Promise.reject(new Error("Inicie sesión"));
+   }
+   else {
+       axios.put(`${BackUrl}/api/alarm/enable/${id}`,{enable: enableAlarma} , {
+           headers: {
+               "auth-token":`${session}`
+           },
+       }).then(({data}) => {
+           console.log(data);
+       }).catch((error: any) => {
+        console.log(error);
+       });
+   }
+};

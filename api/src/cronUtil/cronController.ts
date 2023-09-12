@@ -8,12 +8,13 @@ export const getUserAlarms = async (userId: string) => {
   try {
     const today = dayjs().get("day");
 
-    const actualHour = dayjs().format("HH:MM");
+    const actualHour = dayjs().format("HH:mm");
 
-    const nextHour = dayjs().add(10, "minute").format("HH:MM");
+    const nextHour = dayjs().add(10, "minute").format("HH:mm");
     const result = await Alarm.findAll({
       where: {
         userId: userId,
+        enable: true,
         alarmDays: {
           [Op.contains]: [today],
         },

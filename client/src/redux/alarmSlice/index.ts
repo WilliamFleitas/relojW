@@ -5,6 +5,7 @@ export interface AlarmType {
     description: string;
     id: string;
     alarmDays: number[];
+    enable: boolean;
 }
 
 export interface UserStateType {

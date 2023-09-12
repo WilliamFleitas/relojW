@@ -21,5 +21,10 @@ const createAlarmValidate = [
     }
 ];
 
-
-module.exports = {createAlarmValidate};
+const enableAlarmValidate = [
+  check('enable').trim().isBoolean().withMessage('Must be a boolean true or false'),
+  (req: Request, res: Response, next: NextFunction) => {
+      validateResult(req, res, next);
+  }
+];
+module.exports = {createAlarmValidate, enableAlarmValidate};

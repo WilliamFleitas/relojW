@@ -52,8 +52,7 @@ io.on("connection", (socket) => {
       const userId = datos.userId;
        conWatcher(userId, socket.id);
       userToSocketMap.set(userId, socket.id);
-      
-      socket.emit("evento", datos);
+      // socket.emit("evento", datos);
     }
   });
   socket.on("disconnect", () => {
@@ -76,7 +75,7 @@ function getUserBySocketId(socketId: any) {
 }
 
 sequelize
-  .sync({})
+  .sync({}) 
   .then(() => {
     server.listen(PORT, () => {
       console.log("Database connected");

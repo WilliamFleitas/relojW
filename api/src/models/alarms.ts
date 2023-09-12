@@ -26,6 +26,11 @@ module.exports = (sequelize: any) => {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         allowNull: false
       },
+      enable: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: true
+      },
       iaVideo: {
         type: DataTypes.BLOB,
         allowNull: true

@@ -1,4 +1,5 @@
 import { forEachAlarmFunction, getUserAlarms } from "./cronController";
+import { io } from "../index";
 const cron = require("node-cron");
 
 let nextExecutionTime: Date | undefined;
@@ -44,6 +45,10 @@ async function cronWatcher(userId: string, socketUserId: string) {
       
     aux += 1;
     }
+    io.on("disconnect", () => {
+      task1.stop();
+    })
+    //cuando el usuario se desconecta esto sigue funcionando consumiendo procesos, si el usuario se vuelve a conectar esto sigue corriendo y suma otro proceso mas a la cola y asi suscesivamente
     console.log(aux);
   } catch (error: any) {
     console.log(error);

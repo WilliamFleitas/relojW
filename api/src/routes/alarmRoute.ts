@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 import { createAlarm } from "./controllers/alarmController";
 const { Alarm} = require("../database");
 import axios from "axios";
-const { createAlarmValidate } = require("../validators/alarmValidator");
+const { createAlarmValidate, enableAlarmValidate } = require("../validators/alarmValidator");
 const route = Router();
 
 
@@ -44,6 +44,24 @@ route.post("/didWebhook", async (req: Request, res: Response) => {
    console.log(error);
     res.status(400).send(error); 
  }
+});
+
+route.put("/enable/:id", enableAlarmValidate, async (req: Request, res: Response) => {
+  const {enable} = req.body;
+  try {
+    
+     await Alarm.update({enable: enable}, {
+      where: {
+        id: req.params.id,
+      },
+    });
+    
+    res.status(200).send("Alarm updated correctly");
+  } catch (error: any) {
+    console.log(error);
+    res.status(400).send(`there was an error updating the alarm ${error.response}`)
+    
+  }
 });
 
 route.post(

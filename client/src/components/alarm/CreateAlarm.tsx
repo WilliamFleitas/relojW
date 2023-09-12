@@ -156,13 +156,15 @@ export const CreateAlarm = () => {
   });
 
   return (
-    <div className=" bg-[#ba5d0649] border border-[#ba5d06] text-start items-start w-full h-full rounded-md text-white">
-      <form className="flex flex-row h-full  w-full" onSubmit={handleOnSubmit}>
-        <div className="flex flex-col text-start items-start justify-center w-full p-5 space-y-2">
+    <div className=" bg-[#ba5d0649] border border-[#ba5d06] text-start items-start w-full h-full rounded-md text-white text-[13px] md:text-[16px]">
+      <form className="flex flex-col md:flex-row h-full  w-full" onSubmit={handleOnSubmit}>
+        <div className="flex flex-col text-start items-start justify-center w-full p-2 md:p-5 space-y-2">
+
+          <div className="flex flex-row md:flex-col w-full text-start items-center justify-between md:text-start md:items-start md:justify-center md:space-y-2 gap-x-4">
           <div className="flex flex-col w-full space-y-1">
             <label className="font-bold tracking-wider">Alarm Hour *</label>
             <input
-              className="rounded-md text-zinc-400 w-fit bg-zinc-800 border-none hover:border-none focus:border-none ring-0 focus:ring-0 hover:ring-0"
+              className="rounded-md text-zinc-400 w-fit bg-zinc-800 border-none hover:border-none focus:border-none ring-0 focus:ring-0 hover:ring-0 h-8 md:h-full"
               type="time"
               id="hour"
               {...register("hour")}
@@ -175,7 +177,7 @@ export const CreateAlarm = () => {
           <div className="flex flex-col w-fit space-y-1">
             <label className="font-bold tracking-wider" htmlFor="alarmDays">Repeat Alarm *</label>
             <select
-              className="rounded-md  bg-zinc-800 border-none text-zinc-400 hover:border-none focus:border-none ring-0 focus:ring-0 hover:ring-0"
+              className="rounded-md  bg-zinc-800 border-none text-zinc-400 hover:border-none focus:border-none ring-0 focus:ring-0 hover:ring-0 h-8 md:h-full"
               id="alarmDays"
               name="alarmDays"
               onChange={(event) => handlePerzonalizedAlarm(event)}
@@ -226,10 +228,14 @@ export const CreateAlarm = () => {
             <></>
           )}
         </div>
+          </div>
+          
+
+
         <div className="flex flex-col  w-full space-y-1">
           <label className="font-bold tracking-wider">Alarm Reason</label>
           <input
-            className="rounded-md text-zinc-300 bg-zinc-800 border-none hover:border-none focus:border-none ring-0 focus:ring-0 hover:ring-0"
+            className="rounded-md text-zinc-300 bg-zinc-800 border-none hover:border-none focus:border-none ring-0 focus:ring-0 hover:ring-0 text-[13px] md:text-[16px] h-8 md:h-full"
             type="text"
             id="description"
             {...register("description")}
@@ -245,11 +251,11 @@ export const CreateAlarm = () => {
 
         <div>
         <button
-          className=" flex flex-col text-start items-center justify-center h-full w-[50px] text-[50px] rounded-r-md text-[#ba5d06] bg-zinc-800 border-l border-[#ba5d06] hover:text-[#ba5d06] hover:bg-[#1b1916] focus:bg-[#1a1612c7]"
+          className=" flex flex-col text-start items-center justify-center h-8 md:h-full w-full md:w-[50px] text-[50px] rounded-b-md md:rounded-r md:rounded-l-none text-[#ba5d06] bg-zinc-800 md:border-l border-[#ba5d06] hover:text-[#ba5d06] hover:bg-[#1b1916] focus:bg-[#1a1612c7]   "
           type="submit"
         >
           {" "}
-          <IoMdArrowDropright />
+          <IoMdArrowDropright className="w-8 h-8 md:w-12 md:h-12 rotate-90 md:rotate-0 transform transition-transform duration-300 ease-in-out" />
         </button>
         </div>
         

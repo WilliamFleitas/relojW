@@ -6,8 +6,6 @@ const route = Router();
 route.get("/useralarm/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const currentDate = new Date();
-    const currentTimeString = currentDate.toLocaleTimeString('en-US', { hour12: false });
   
     const result = await Alarm.findAll({
       where: {
@@ -17,7 +15,12 @@ route.get("/useralarm/:id", async (req: Request, res: Response) => {
         exclude: ["iaVideo", "iaMessage"],
       },
       order: [
-        [sequelize.literal(`ABS(EXTRACT(EPOCH FROM (hour::time - '${currentTimeString}'))) DESC`)],
+        [
+          sequelize.literal(
+            "EXTRACT(HOUR FROM CAST(hour AS TIME)) * 60 + EXTRACT(MINUTE FROM CAST(hour AS TIME))"
+          ),
+          "ASC",
+        ],
       ],
     });
     console.log("result", result);
