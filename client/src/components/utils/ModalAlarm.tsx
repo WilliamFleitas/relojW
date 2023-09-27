@@ -36,7 +36,7 @@ export default function ModalAlarm({Content, isOpen, onClose, header, icon, prim
         </Transition.Child>
 
         <div className="fixed inset-0 z-10 overflow-y-auto ">
-          <div className="flex     items-end justify-center p-4 text-center sm:items-center sm:p-0 ">
+          <div className="flex     items-end justify-center  text-center sm:items-center">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -46,16 +46,16 @@ export default function ModalAlarm({Content, isOpen, onClose, header, icon, prim
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative  transform w-screen h-screen  bg-[#1f1e1f] text-white transition-all flex flex-col p-10">
-                <div className=" ">
+              <Dialog.Panel className="relative  transform w-screen h-screen overflow-y-scroll no-scrollbar bg-gradient-to-r from-[#582823] to-[#1c1a18]   text-white transition-all flex flex-col p-10">
+                <div className="">
                   <Dialog.Title className={"pb-2 flex flex-row text-center justify-center gap-x-2 items-center "}>
                     
-                    <div className="bg-[#b5611811] shadow-md border border-[#b561184f] rounded-md py-2 px-4 mr-auto font-medium text-[20px] ">
+                    <div className="hidden sm:flex bg-[#1615149a] shadow-md border border-[#b56118] rounded-md py-2 px-2 mr-auto font-medium text-[20px] ">
                       <h2 className=" tracking-widest">{header?.toString().toUpperCase()}</h2>
                     </div>
                   </Dialog.Title>
 
-                  <div className="">
+                  <div className="w-full h-full">
                     {Content}
                   </div>
                 </div>

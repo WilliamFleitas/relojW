@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
 import { AlarmLayout } from "../alarm/AlarmLayout";
-import { Home } from "./components/Home";
 import NavBar from "../navbar/NavBar";
 import { io } from "socket.io-client";
 import { useAppDispatch, useAppSelector } from "../../hooks";
@@ -23,32 +22,35 @@ interface DashboardPageTypeProps {
   user: IUserType | null;
 }
 
-const DashboardLayout = ({ user }: DashboardPageTypeProps) => {
-  // const session = JSON.parse(
-  //     window.localStorage.getItem("userSession") as string
-  //   );
-  const [alarmMessage, setAlarmMessage] = useState<userDataTypes>();
+const DashboardLayout = () => {
+  const dispatch = useAppDispatch();
+  const {user} = useAppSelector((state) => state.user);
+  const [alarmMessage, setAlarmMessage] = useState<userDataTypes | null>(null);
+  const [iaVideo, setIaVideo] = useState<Blob | null>(null);
   const [alarmSwitch, setAlarmSwitch] = useState<boolean>(false);
 
   socket.on("userAlarm", (data) => {
-    console.log("userAlarm:", data);
     setAlarmMessage(data);
     setAlarmSwitch(true);
+    socket.on("iaVideoResult", (iaVideo) => {
+      console.log("fueradeluseEffect", iaVideo);
+      setIaVideo(iaVideo);
+    }); 
   });
   useEffect(() => {
     if (user?.username.length) {
       socket.emit("dataUser", {
-        username: user?.username,
-        userId: user?.id,
+        username: user.username,
+        userId: user.id,
       });
     }
     return () => {};
   }, [user]);
+  useEffect(()=> {
+ dispatch(getUserData());
+  },[]);
   return (
-    <div className="relative flex flex-col md:flex-row w-full md:h-screen text-center items-center justify-between">
-      <div className="flex flex-col md:block w-full  h-full md:order-last">
-        <Outlet />
-      </div>
+    <div className="relative flex flex-col lg:flex-row w-full h-screen text-center items-center justify-between">
       {alarmMessage ? (
         <ModalAlarm
           isOpen={alarmSwitch}
@@ -56,7 +58,8 @@ const DashboardLayout = ({ user }: DashboardPageTypeProps) => {
           header={"Alarm"}
           Content={
             <AlarmScreen
-              iaVideo={alarmMessage.iaVideo}
+              onClose={setAlarmSwitch}
+              iaVideo={iaVideo}
               iaMessage={alarmMessage.iaMessage}
               description={alarmMessage.description}
               data={alarmMessage.data}
@@ -67,18 +70,21 @@ const DashboardLayout = ({ user }: DashboardPageTypeProps) => {
       ) : (
         <></>
       )}
-      <div className=" md:order-first sticky md:relative  bottom-0 w-full border-t md:border-t-0 flex  h-fit  md:py-0  md:min-h-screen md:min-w-[80px] md:max-w-[80px] bg-[#4b2d14] md:bg-[#ba5d0649]  md:border-r border-[#ba5d06]">
+      <div className="flex flex-col lg:block w-full  h-full lg:order-last">
+        <Outlet />
+      </div>
+      
+      <div className=" lg:order-first sticky lg:relative  bottom-0   w-full border-t lg:border-t-0 flex  h-fit  lg:py-0  lg:min-h-screen lg:min-w-[80px] lg:max-w-[80px] bg-[#1c1a18]  shadow-md ">
         <NavBar />
       </div>
     </div>
   );
 };
 
-const DashboardPage = ({ user }: DashboardPageTypeProps) => (
+const DashboardPage = () => (
   <Routes>
-    <Route element={<DashboardLayout user={user} />}>
+    <Route element={<DashboardLayout />}>
       <Route index element={<AlarmLayout />} />
-      {/* <Route path="/home" element={<Home/>}/> */}
       <Route path="/alarm" element={<AlarmLayout />} />
     </Route>
   </Routes>

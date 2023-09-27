@@ -6,7 +6,24 @@ const {User} = require("../database");
 
 
 const createUserValidate = [
-    check('username').exists().withMessage('Insert Username').not().isEmpty().isLength({ min: 5 }).withMessage('Min 5 characters').isString().withMessage('UserName has to be a string'),
+    check('username').exists().withMessage('Insert Username').not().isEmpty().isLength({ min: 5 }).withMessage('Min 5 characters').isString().withMessage('UserName has to be a string').custom((value: string) => {
+      return  User.findOne({
+          where: { username: value},
+        }).then( (user: userType): any => {
+          if (user) {
+            return Promise.reject('User not available');
+          }
+        });
+      }),
+    check('email').exists().isEmail().not().isEmpty().withMessage('Insert email').custom((value: string) => {
+      return  User.findOne({
+          where: { email: value},
+        }).then( (user: userType): any => {
+          if (user) {
+            return Promise.reject('Email not available');
+          }
+        });
+      }),
     check('password').exists().withMessage('Insert password').not().isEmpty()
     .isLength({ min: 8 }).withMessage('Min 8 characters and 1 number').isString().withMessage('Password has to be a string').not()
     .isIn(['123', 'password', 'god', 'asdasd', "123456789"])

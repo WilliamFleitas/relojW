@@ -1,21 +1,32 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+interface AlarmAnalytic {
+    actualWeek: number[];
+    lastWeek: number[];
+    timesSounded: number;
+};
 export interface AlarmType {
     hour: string;
     description: string;
     id: string;
     alarmDays: number[];
     enable: boolean;
+    alarmType: string;
+    createdAt: string;
+    goalDateEnd: string | null;
+    goalNotes: string[] | null;
+    goalType: boolean;
+    alarmAnalytic: AlarmAnalytic;
 }
 
 export interface UserStateType {
-    alarmList: AlarmType[];
+    alarmList: AlarmType[] | null;
     loading: Boolean;
     error: string;
 };
 
 const initialState: UserStateType = {
-    alarmList: [],
+    alarmList: null,
     loading: false,
     error: ""
 };
@@ -28,7 +39,7 @@ const AlarmSlice = createSlice({
             state.alarmList = action.payload;
         },
         clearAlarmList(state){
-            state.alarmList = [];
+            state.alarmList = null;
         },
         setLoadingAlarm(state, action: PayloadAction<Boolean>){
             state.loading = action.payload

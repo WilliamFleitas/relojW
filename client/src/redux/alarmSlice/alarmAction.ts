@@ -17,7 +17,6 @@ export const getUserAlarms = (id: string) => (dispatch : AppDispatch) => {
                 "auth-token":`${session}`
             },
         }).then(({data}) => {
-            console.log(data);
             dispatch(setAlarmData(data));
         }).catch((e: any) => {
             dispatch(setError(e.message));
@@ -46,3 +45,23 @@ export const updateEnableAlarm = (id:string, enableAlarma: boolean) => (dispatch
        });
    }
 };
+
+export const deleteAlarm = (id:string, userId:string) => (dispatch : AppDispatch) => {
+    
+    const session = JSON.parse(window.localStorage.getItem("userSession") as string);
+    if(!session){
+       return Promise.reject(new Error("Inicie sesión"));
+    }
+    else {
+        axios.delete(`${BackUrl}/api/alarm/deleteAlarm/${id}`, {
+            headers: {
+                "auth-token":`${session}`
+            },
+        }).then(({data}) => {
+            console.log(data);
+            dispatch(getUserAlarms(userId));
+        }).catch((error: any) => {
+         console.log(error);
+        });
+    }
+ };

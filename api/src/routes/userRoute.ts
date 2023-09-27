@@ -1,6 +1,6 @@
 
 import { Router, Request, Response } from "express";
-const { Alarm, sequelize } = require("../database");
+const { Alarm, sequelize} = require("../database");
 const route = Router();
 
 route.get("/useralarm/:id", async (req: Request, res: Response) => {
@@ -14,6 +14,13 @@ route.get("/useralarm/:id", async (req: Request, res: Response) => {
       attributes: {
         exclude: ["iaVideo", "iaMessage"],
       },
+      include: [
+        {
+          model: sequelize.models.AlarmAnalytic,
+          as: "alarmAnalytic", 
+          attributes: ["actualWeek", "lastWeek", "timesSounded"],
+        },
+      ],
       order: [
         [
           sequelize.literal(
@@ -23,7 +30,6 @@ route.get("/useralarm/:id", async (req: Request, res: Response) => {
         ],
       ],
     });
-    console.log("result", result);
     res.status(200).send(result);
   } catch (error: any) {
     console.log("error", error);

@@ -1,156 +1,187 @@
-import React, { useEffect, useRef, useState } from "react";
-import { io } from "socket.io-client";
+import  { useEffect, useRef, useState } from "react";
 import { Typewriter } from "../utils/TypeWriter";
-const socket = io("http://localhost:3001");
+import NoVideoImg from "../../assets/shakinghead.gif";
+import ChroniClosedEyes from "../../assets/chroniClosedEyes.png";
+import AlarmAudio from "../../assets/ringtone-alarm.mp3";
 import "./AlarmScreen.css";
 interface AlarmTypeProps {
-  iaMessage: string;
+  iaMessage?: string;
   description: string;
-  iaVideo: Blob;
+  iaVideo?: Blob | null;
   data: string;
   hour: string;
+  onClose: (value: boolean) => void;
 }
 
-// const fetchData = async (
-//   iaMessage: string,
-//   audioRef: React.RefObject<HTMLAudioElement>
-// ) => {
-//   const voice = "21m00Tcm4TlvDq8ikWAM";
-//   try {
-//     const response = await axios.post(
-//       "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM?optimize_streaming_latency=0",
-//       {
-//         text: iaMessage,
-//         model_id: "eleven_monolingual_v1",
-//         voice_settings: {
-//           stability: 0,
-//           similarity_boost: 0,
-//           style: 0.5,
-//           use_speaker_boost: true,
-//         },
-//       },
-//       {
-//         headers: {
-//           "Content-Type": "application/json",
-//           accept: "audio/mpeg",
-//           "xi-api-key": "98abe736d164f534e57adbc52ed98276",
-//         },
-//         responseType: "arraybuffer",
-//       }
-//     );
-//     console.log(response);
-//     const audioData = response.data;
-//     const audioBlob = new Blob([audioData], { type: "audio/mpeg" });
-//     const audioUrl = URL.createObjectURL(audioBlob);
-//     if (audioRef.current) {
-//       audioRef.current.src = audioUrl;
-//       audioRef.current.play();
-//     }
-//   } catch (error) {
-//     console.error("Error:", error);
-//   }
-// };
 export const AlarmScreen = ({
   iaMessage,
   data,
   hour,
   description,
   iaVideo,
+  onClose,
 }: AlarmTypeProps) => {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [videoIsPlaying, setVideoIsPlaying] = useState(false);
+  const [audioisPlaying, setAudioIsPlaying] = useState(false);
+  const [iaVideoValue, setIaVideoValue] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  useEffect(() => {
-    if (iaVideo && videoRef.current) {
-      const blob = new Blob([iaVideo], { type: "video/mp4" });
-      const url = URL.createObjectURL(blob);
-
-      videoRef.current.src = url;
-      videoRef.current.play();
-      const handlePlay = () => {
-        setIsPlaying(true);
-        console.log("El video se está reproduciendo");
-      };
-
-      const handlePause = () => {
-        setIsPlaying(false);
-        console.log("El video se ha pausado");
-      };
-
-      videoRef.current.addEventListener("play", handlePlay);
-      videoRef.current.addEventListener("pause", handlePause);
-      return () => URL.revokeObjectURL(url);
+  const stopAlarmClick = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      setAudioIsPlaying(false);
     }
+    if (iaVideo) {
+      setVideoIsPlaying(true);
+      console.log("El video se está reproduciendo");
+    }
+  };
+ const handleStopVideo = () => {
+  console.log("videoStoped");
+  setVideoIsPlaying(false);
+  setIaVideoValue(null);
+ }; 
+  useEffect(() => {
+    if (iaVideo) {
+      const blob = new Blob([iaVideo], { type: "video/mp4" });
+      console.log("iavideollegousefect");
+      const url = URL.createObjectURL(blob);
+      setIaVideoValue(url);
+      return () => {
+        URL.revokeObjectURL(url);
+        setVideoIsPlaying(false);
+        setIaVideoValue(null);
+      };
+    }
+  }, [iaVideo]);
+ 
+  
+  useEffect(() => {
+    const audio = audioRef.current;
+    setVideoIsPlaying(false);
+    if (audio) {
+      audio.play();
+      setAudioIsPlaying(true);
+    }
+    return () => {
+      if (audio) {
+        audio.pause();
+        setAudioIsPlaying(false);
+      }
+    };
   }, []);
-  console.log(iaMessage, iaVideo);
+
+  console.log(videoIsPlaying, audioRef);
   return (
-    <div className="flex flex-col  select-none w-full h-full text-white z-50  text-start  items-center justify-center space-y-8">
-        <div className="flex flex-row w-full h-full text-start items-center justify-between gap-x-4">
-          <div className="flex flex-col  py-4 px-6 stext-start items-center justify-center space-y-4 bg-[#b5611811] border border-[#f07d19a9]  shadow-md select-none  shadow-[#f07d19a9] rounded-md mr-auto">
-            <div className="flex flex-row text-[35px] md:text-[55px]  text-start items-center justify-between">
-              <div className="flex flex-row ">
+    <div className="flex flex-col  select-none w-full h-full text-white z-50  text-start  items-center justify-center sm:space-y-8">
+      <div className="flex flex-col sm:flex-row w-full h-full text-start items-center justify-between gap-x-4">
+        <div className="flex flex-col w-full sm:w-fit  sm:mb:0 py-4 px-6 stext-start items-center justify-center space-y-4 bg-[#1615149a] shadow-md border border-[#b56118] select-none  rounded-md mr-auto mb-6 sm:mb-0">
+          <div className="flex flex-row text-[35px] md:text-[55px]  text-start items-center justify-between">
+            <div className="flex flex-row ">
               <span className=" bg-[#b5611845] border border-[#f07d19a9]  shadow-md select-none shadow-[#f07d19a9] rounded-md   p-2 ">
                 {hour.slice(0, 2)}
               </span>
               <p className="text-white m-auto ">H:</p>
-              </div>
-              <div className="flex flex-row ">
+            </div>
+            <div className="flex flex-row ">
               <span className=" bg-[#b5611845] border border-[#f07d19a9]  shadow-md select-none shadow-[#f07d19a9] rounded-md   p-2 ">
-              {hour.slice(3, 5)}
+                {hour.slice(3, 5)}
               </span>
               <p className="text-white m-auto ">M:</p>
-              </div>
-              <div className="flex flex-row ">
+            </div>
+            <div className="flex flex-row ">
               <span className=" bg-[#b5611845] border border-[#f07d19a9]  shadow-md select-none shadow-[#f07d19a9] rounded-md   p-2 ">
-              {hour.slice(6, 8)}
+                {hour.slice(6, 8)}
               </span>
-              <p className="text-white m-auto ">S:</p>
-              </div>
-              
+              <p className="text-white m-auto ">S</p>
             </div>
-            <span className="text-[25px]">{description}</span>
           </div>
-          {/* <div className="flex flex-col relative text-start items-center justify-center  border border-[#f07d19a9]  shadow-md select-none  shadow-[#f07d19a9] rounded-full  ">
-           
-            <video
-              className="max-w-[30vw] min-w-[30vw] min-h-fit rounded-full "
-              ref={videoRef}
-              muted
-              autoPlay
-              controls
-              width="640"
-              height="360"
-            >
-              Your browser does not support video playback
-            </video>
-          </div> */}
-          <div className="flex flex-col items-center content-center">
-            <div className={`outer-circle ${!isPlaying ? "outer-circle-end": ""} `}>
-            <div className={`outer-circle ${!isPlaying ? "outer-circle-end": ""} `}>
-            </div>
-             <span></span>
-            <span></span>
-            <span></span>
-            <span></span> 
-            </div>
-            
-            <div className="flex flex-col  text-start items-center justify-center  border border-[#f07d19a9]  shadow-md select-none  shadow-[#f07d19a9] rounded-full z-50 absolute right-[9.5vw]">
-           
-           <video
-             className="max-w-[25vw] min-w-[25vw] min-h-fit rounded-full "
-             ref={videoRef}
-             autoPlay
-             width="640"
-             height="360"
-           >
-             Your browser does not support video playback
-           </video>
-         </div>
-            </div> 
+          <span className="text-[25px]">{description}</span>
         </div>
 
-        <div className="bg-[#b5611811] border border-[#f07d19a9]  shadow-md select-none  shadow-[#f07d19a9] rounded-md p-5 w-full h-full min-h-[150px]">
-          <Typewriter text={iaMessage} />
+        <div className="flex flex-col text-start items-center justify-center sm:mb-6  sm:content-center">
+          <div
+            className={`outer-circle ${
+              !videoIsPlaying ? "outer-circle-end" : ""
+            } `}
+          >
+            <div
+              className={`outer-circle ${
+                !videoIsPlaying || !audioisPlaying ? "outer-circle-end" : ""
+              } `}
+            ></div>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <div className="flex flex-col  text-start items-center justify-center  border border-[#f07d19a9]  shadow-md select-none  shadow-[#f07d19a9] rounded-full z-50 absolute top-[200px] sm:top-[56px] lg:right-[152px]">
+            {audioisPlaying && !videoIsPlaying ? (
+              <img
+                className=" w-full h-full max-h-[250px] min-h-[250px] max-w-[250px] min-w-[250px] rounded-full "
+                src={NoVideoImg}
+                alt={NoVideoImg}
+              />
+            ) : (
+              <></>
+            )}
+            { iaVideoValue && videoIsPlaying && !audioisPlaying ? (
+              <video
+                className=" w-full h-full max-h-[250px] min-h-[250px] max-w-[250px] min-w-[250px] rounded-full "
+                autoPlay
+                src={iaVideoValue}
+                ref={videoRef}
+                onEnded={() => handleStopVideo()}
+              >
+                Your browser does not support video playback
+              </video> 
+            ) : <></>}
+            {
+              !audioisPlaying && !videoIsPlaying ? 
+              <img
+                className=" w-full h-full max-h-[250px] object-cover min-h-[250px] max-w-[250px] min-w-[250px] rounded-full "
+                src={ChroniClosedEyes}
+                alt={"ChroniClosedEyes"}
+              /> : <></>
+            }
+          </div>
         </div>
+      </div>
+
+      <div className="bg-[#1615149a] shadow-md border border-[#b56118]   select-none  rounded-md p-5 w-full h-full min-h-[150px]">
+        <Typewriter
+          text={
+            iaMessage
+              ? iaMessage
+              : "There was an error with the avatar stream, replacing avatar for an alarm sound, we apologize for the problems"
+          }
+        />
+      </div>
+      <div>
+        <audio autoPlay loop ref={audioRef}>
+          <source src={AlarmAudio} type="audio/mpeg" />
+          Your browser does not support audio playback.
+        </audio>
+      </div>
+
+      <div className="absolute bottom-2">
+        {audioisPlaying ? (
+          <button
+            className="bg-[#b5611811] border border-[#f07d19a9]  animate-bounce h-14 w-14 rounded-full"
+            onClick={stopAlarmClick}
+          >
+            STOP
+          </button>
+        ) : (
+          <button
+            className="bg-[#b5611811] border border-[#f07d19a9]  animate-bounce h-14 w-14 rounded-full"
+            onClick={() => onClose(false)}
+          >
+            ClOSE
+          </button>
+        )}
+      </div>
     </div>
   );
 };

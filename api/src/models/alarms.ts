@@ -18,6 +18,10 @@ module.exports = (sequelize: any) => {
         type: DataTypes.STRING,
         allowNull: false
       },
+      alarmType: {
+        type: DataTypes.ENUM("once", "daily", "custom"),
+        allowNull: false
+      },
       iaMessage: {
         type: DataTypes.TEXT,
         allowNull: true
@@ -35,10 +39,22 @@ module.exports = (sequelize: any) => {
         type: DataTypes.BLOB,
         allowNull: true
       },
+      goalType: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
+      goalDateEnd: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
+      goalNotes: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true,
+      },
     },
     
     {
-      timestamps: false,
+      timestamps: true,
       
     },
     

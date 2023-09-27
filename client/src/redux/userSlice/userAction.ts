@@ -18,8 +18,8 @@ export const getUserData = () => (dispatch : AppDispatch) => {
             }, 
         }).then(({data}) => {
             dispatch(setDataUser({username: data.username, id: data.id, role: data.role,}))
-        }).catch((e: any) => {
-            dispatch(clearDataUser());
+        }).catch((error: any) => {
+            console.log(error)
         }).finally(() => {
             dispatch(setLoadingUser(false));
         });
@@ -27,6 +27,10 @@ export const getUserData = () => (dispatch : AppDispatch) => {
     
 };
 
+export const userSignOut = () => (dispatch : AppDispatch) => {
+    dispatch(clearDataUser());
+    window.localStorage.removeItem("userSession");
+};
 export const changeUserSocket = (webSocket: boolean) => (dispatch : AppDispatch) => {
     dispatch(setUserSocket(webSocket));
 };
