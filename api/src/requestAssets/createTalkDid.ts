@@ -1,15 +1,15 @@
 import axios from "axios";
-const DID_API_KEY: string = process.env.DID_API_KEY as string;
-
+const DID_API_KEY: string = process.env.DID_API_KEY?.toString() as string;
+const webhook_url: string = process.env.DID_WEBHOOK_URL?.toString() as string;
 export const createTalkDid = async (promtValue: string, userId: string) => {
      try {
-      axios.post(
+     await axios.post(
         "https://api.d-id.com/talks",
         {
           script: {
             type: "text",
             subtitles: "false",
-            stitch: "false",
+            stitch: "true",
             input: promtValue,
             "provider": {
               "type": "microsoft",
@@ -17,7 +17,7 @@ export const createTalkDid = async (promtValue: string, userId: string) => {
             }
           },
           source_url: "https://i.imgur.com/EHaaqXR.png",
-          webhook: "https://7f04-2803-2a00-4000-2152-4d5-2345-456e-8bcd.ngrok.io/api/alarm/didWebhook",
+          webhook: `${webhook_url}/api/alarm/didWebhook`,
           user_data: userId,
           
         },
@@ -29,7 +29,8 @@ export const createTalkDid = async (promtValue: string, userId: string) => {
           },
         }
       );
-     } catch (error) {
-      console.log(error)
+     } catch (error: any) {
+      console.log("createTalk", error)
+      throw new Error(error)
      }
 };

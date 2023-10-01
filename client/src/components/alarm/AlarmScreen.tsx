@@ -3,6 +3,7 @@ import { Typewriter } from "../utils/TypeWriter";
 import NoVideoImg from "../../assets/shakinghead.gif";
 import ChroniClosedEyes from "../../assets/chroniClosedEyes.png";
 import AlarmAudio from "../../assets/ringtone-alarm.mp3";
+import ChroniLoading from "../../assets/ChroniAlarmLoading.mp4";
 import "./AlarmScreen.css";
 interface AlarmTypeProps {
   iaMessage?: string;
@@ -23,6 +24,7 @@ export const AlarmScreen = ({
 }: AlarmTypeProps) => {
   const [videoIsPlaying, setVideoIsPlaying] = useState(false);
   const [audioisPlaying, setAudioIsPlaying] = useState(false);
+  const [videoLoading, setVideoLoading] = useState<boolean>(false);
   const [iaVideoValue, setIaVideoValue] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -31,10 +33,16 @@ export const AlarmScreen = ({
       audioRef.current.pause();
       setAudioIsPlaying(false);
     }
+    
     if (iaVideo) {
       setVideoIsPlaying(true);
+      setVideoLoading(false);
       console.log("El video se está reproduciendo");
     }
+    if(!iaVideo){
+      setVideoLoading(true);
+    }
+    //si iavideo no tiene nada podes meter un video de espera aca
   };
  const handleStopVideo = () => {
   console.log("videoStoped");
@@ -44,9 +52,14 @@ export const AlarmScreen = ({
   useEffect(() => {
     if (iaVideo) {
       const blob = new Blob([iaVideo], { type: "video/mp4" });
-      console.log("iavideollegousefect");
-      const url = URL.createObjectURL(blob);
-      setIaVideoValue(url);
+        console.log("iavideollegousefect");
+        const url = URL.createObjectURL(blob);
+        setIaVideoValue(url);
+      if(!audioisPlaying){
+        setVideoIsPlaying(true);
+        setVideoLoading(false);
+      }
+      
       return () => {
         URL.revokeObjectURL(url);
         setVideoIsPlaying(false);
@@ -116,19 +129,33 @@ export const AlarmScreen = ({
             <span></span>
           </div>
 
-          <div className="flex flex-col  text-start items-center justify-center  border border-[#f07d19a9]  shadow-md select-none  shadow-[#f07d19a9] rounded-full z-50 absolute top-[200px] sm:top-[56px] lg:right-[152px]">
-            {audioisPlaying && !videoIsPlaying ? (
+          <div className={`flex flex-col  text-start items-center justify-center ${!audioisPlaying && !videoIsPlaying && !videoLoading ? "border-0" : "border border-[#f07d19a9]"}   shadow-md select-none  shadow-[#f07d19a9] rounded-full z-50 absolute top-[200px] sm:top-[50px] lg:right-[152px]`}>
+            {audioisPlaying && !videoIsPlaying  ? (
               <img
-                className=" w-full h-full max-h-[250px] min-h-[250px] max-w-[250px] min-w-[250px] rounded-full "
+                className=" w-full h-full max-h-[250px] min-h-[250px] max-w-[250px] min-w-[250px] rounded-full transform transition-colors delay-150 "
                 src={NoVideoImg}
                 alt={NoVideoImg}
               />
             ) : (
               <></>
             )}
+            
+            {  !audioisPlaying && videoLoading ? (
+              <div className="relative border-0">
+              <video
+                className=" w-full rounded-full h-full max-h-[250px] min-h-[250px] max-w-[250px] min-w-[250px] transform transition-colors delay-150  border-0"
+                autoPlay
+                loop
+                src={ChroniLoading}
+              > 
+                Your browser does not support video playback
+              </video>
+              <span className="absolute z-50 text-white animate-bounce top-[115px] right-[90px]">Loading..</span> 
+              </div>
+            ) : <></>}
             { iaVideoValue && videoIsPlaying && !audioisPlaying ? (
               <video
-                className=" w-full h-full max-h-[250px] min-h-[250px] max-w-[250px] min-w-[250px] rounded-full "
+                className=" w-full rounded-full h-full max-h-[250px] min-h-[250px] max-w-[250px] min-w-[250px] transform transition-colors delay-150 "
                 autoPlay
                 src={iaVideoValue}
                 ref={videoRef}
@@ -138,9 +165,9 @@ export const AlarmScreen = ({
               </video> 
             ) : <></>}
             {
-              !audioisPlaying && !videoIsPlaying ? 
+              !audioisPlaying && !videoIsPlaying && !videoLoading ? 
               <img
-                className=" w-full h-full max-h-[250px] object-cover min-h-[250px] max-w-[250px] min-w-[250px] rounded-full "
+                className=" transform transition-colors delay-150 w-full h-full max-h-[195px] object-cover min-h-[195px] max-w-[195px] min-w-[195px] rounded-full scale-125  sm:absolute sm:top-[29px] lg:right-[25px] overflow-hidden"
                 src={ChroniClosedEyes}
                 alt={"ChroniClosedEyes"}
               /> : <></>

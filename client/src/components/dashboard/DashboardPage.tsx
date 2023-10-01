@@ -30,6 +30,7 @@ const DashboardLayout = () => {
   const [alarmSwitch, setAlarmSwitch] = useState<boolean>(false);
 
   socket.on("userAlarm", (data) => {
+    setAlarmMessage(null);
     setAlarmMessage(data);
     setAlarmSwitch(true);
     socket.on("iaVideoResult", (iaVideo) => {

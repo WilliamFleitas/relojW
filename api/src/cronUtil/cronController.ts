@@ -61,27 +61,32 @@ export const forEachAlarmFunction = (
     const hourAlarm = alarm.hour.slice(0, 5);
     const hourToMiliseconds = calculateTimeUntilAlarm(hourAlarm);
     
+    createTalkDid(alarm.iaMessage, userId);
 
     setTimeout(async () => {
       console.log("¡Es hora de sonar la alarma!", index);
-      createTalkDid(alarm.iaMessage, userId);
       const alertObjet = {
         data: `Alarma para ${
           alarm.description ? alarm.description : "uwu"
         } + ${alarm.hour}`,
         iaMessage: alarm.iaMessage,
-        // iaVideo: alarm.iaVideo,
         hour: alarm.hour,
         description: alarm.description,
       };
       console.log("socketid", userId)
       io.to(`user-${userId}`).emit("userAlarm", alertObjet);
       if(alarm.alarmType === "once"){
-        await Alarm.update({enable: false}, {
-          where: {
-            id: alarm.id
-          },
-        });
+        try {
+          await Alarm.update({enable: false}, {
+            where: {
+              id: alarm.id
+            },
+          });
+        } catch (error: any) {
+          console.log("OnceAlarmUpdateError", error);
+          throw new Error(error)
+        }
+        
       }
     }, hourToMiliseconds);
     
