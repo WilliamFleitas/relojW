@@ -6,19 +6,13 @@ const jwt = require("jsonwebtoken");
 export const signUp = async (body: userType) => {
   try {
     
-    const findUsername = await User.findOne({
-      where: { username: body.username },
-    });
-    if (findUsername) {
-        throw new Error("User unavailable");
-    } 
-    else {
       const password: Promise<string> = await bcrypt.hashSync(
         body.password,
         10
       );
       const user = {
         username: body.username,
+        email: body.email,
         password: password.toString(),
       };
 
@@ -29,7 +23,7 @@ export const signUp = async (body: userType) => {
       } else {
         throw new Error("There was an error creating the user");
       }
-    }
+    
   } catch (error: any) {
     throw new Error(error);
   }

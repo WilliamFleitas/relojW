@@ -1,13 +1,11 @@
 
 import { Router, Request, Response } from "express";
-const { Alarm, sequelize } = require("../database");
+const { Alarm, sequelize} = require("../database");
 const route = Router();
 
 route.get("/useralarm/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const currentDate = new Date();
-    const currentTimeString = currentDate.toLocaleTimeString('en-US', { hour12: false });
   
     const result = await Alarm.findAll({
       where: {
@@ -16,11 +14,22 @@ route.get("/useralarm/:id", async (req: Request, res: Response) => {
       attributes: {
         exclude: ["iaVideo", "iaMessage"],
       },
+      include: [
+        {
+          model: sequelize.models.AlarmAnalytic,
+          as: "alarmAnalytic", 
+          attributes: ["actualWeek", "lastWeek", "timesSounded"],
+        },
+      ],
       order: [
-        [sequelize.literal(`ABS(EXTRACT(EPOCH FROM (hour::time - '${currentTimeString}'))) DESC`)],
+        [
+          sequelize.literal(
+            "EXTRACT(HOUR FROM CAST(hour AS TIME)) * 60 + EXTRACT(MINUTE FROM CAST(hour AS TIME))"
+          ),
+          "ASC",
+        ],
       ],
     });
-    console.log("result", result);
     res.status(200).send(result);
   } catch (error: any) {
     console.log("error", error);

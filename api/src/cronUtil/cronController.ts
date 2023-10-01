@@ -1,5 +1,6 @@
 import { alarmType } from "../typos";
 import { io } from "../index";
+import { createTalkDid } from "../requestAssets/createTalkDid";
 const { Alarm } = require("../database");
 const { Op } = require("sequelize");
 const dayjs = require("dayjs");
@@ -8,12 +9,14 @@ export const getUserAlarms = async (userId: string) => {
   try {
     const today = dayjs().get("day");
 
-    const actualHour = dayjs().format("HH:MM");
+    const actualHour = dayjs().format("HH:mm");
 
-    const nextHour = dayjs().add(10, "minute").format("HH:MM");
+    const nextHour = dayjs().format("HH:mm");
+    // const nextHour = dayjs().add(10, "minute").format("HH:mm");
     const result = await Alarm.findAll({
       where: {
         userId: userId,
+        enable: true,
         alarmDays: {
           [Op.contains]: [today],
         },
@@ -52,25 +55,39 @@ export const calculateTimeUntilAlarm = (alarmTime: string) => {
  
 export const forEachAlarmFunction = (
   findAlarms : alarmType[], 
-  socketUserId: string) => {
+  userId: string) => {
 
   findAlarms.forEach(async (alarm, index) => {
     const hourAlarm = alarm.hour.slice(0, 5);
     const hourToMiliseconds = calculateTimeUntilAlarm(hourAlarm);
     
+    createTalkDid(alarm.iaMessage, userId);
 
-    setTimeout(() => {
+    setTimeout(async () => {
       console.log("¡Es hora de sonar la alarma!", index);
       const alertObjet = {
         data: `Alarma para ${
           alarm.description ? alarm.description : "uwu"
         } + ${alarm.hour}`,
         iaMessage: alarm.iaMessage,
-        iaVideo: alarm.iaVideo,
         hour: alarm.hour,
         description: alarm.description,
       };
-      io.to(socketUserId).emit("userAlarm", alertObjet);
+      console.log("socketid", userId)
+      io.to(`user-${userId}`).emit("userAlarm", alertObjet);
+      if(alarm.alarmType === "once"){
+        try {
+          await Alarm.update({enable: false}, {
+            where: {
+              id: alarm.id
+            },
+          });
+        } catch (error: any) {
+          console.log("OnceAlarmUpdateError", error);
+          throw new Error(error)
+        }
+        
+      }
     }, hourToMiliseconds);
     
   });

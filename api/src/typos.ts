@@ -2,6 +2,7 @@
 export interface userType {
     username: string;
     password: string;
+    email: string;
     role: "none" | "user" | "admin";
     id: string;
 }
@@ -12,6 +13,7 @@ export interface alarmType {
     hour: string;
     description: string;
     alarmDays: string;
+    alarmType: string;
     iaMessage: string;
     iaVideo: Blob;
 }

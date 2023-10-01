@@ -12,7 +12,6 @@ const morgan = require("morgan");
 const FRONT_URL = process.env.FRONT_URL;
 const PORT = process.env.PORT;
 
-
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -22,10 +21,8 @@ const io = new Server(server, {
 });
 app.use(cors());
 
-
-
 app.use((_req: Request, res: Response, next: NextFunction) => {
-  res.header("Access-Control-Allow-Origin", FRONT_URL); 
+  res.header("Access-Control-Allow-Origin", FRONT_URL);
   res.header("Access-Control-Allow-Credentials", "true");
   res.header(
     "Access-Control-Allow-Headers",
@@ -39,41 +36,41 @@ app.use(express.json()); // transforma la req.body a un objeto
 
 app.use(morgan("dev"));
 
-
 app.use("/", routes);
-let userToSocketMap = new Map();
+let userToSocketArray: { userId: string; socketId: string }[] = [];
 
 io.on("connection", (socket) => {
-  
-  socket.on("dataUser", (datos) => {
-    if (datos.userId ) {
-      console.log("New client conect");
-      console.log("Data received:", datos);
-      const userId = datos.userId;
-       conWatcher(userId, socket.id);
-      userToSocketMap.set(userId, socket.id);
-      
-      socket.emit("evento", datos);
-    }
-  });
-  socket.on("disconnect", () => {
-    
-    const userId = getUserBySocketId(socket.id);
-    if (userId) {
-      userToSocketMap.delete(userId);
-      console.log("Client disconnected");
+  //necesito el socket.id para desconectar solo una ventana del usuario y no todas
+  //al eliminar un userId del array de usersId se desconecta el socket
+  //tenes socket.id el cual podes
+  socket.on("dataUser", async (data) => {
+    if (data.userId) {
+      const roomName = `user-${data.userId}`;
+      if (!userToSocketArray.find((item) => item.userId === data.userId)) {
+        console.log("New client conect");
+        console.log("Data received:", data);
+        const task = await conWatcher(data.userId);
+        task.start();
+        socket.on("disconnect", () => {
+          const socketId = userToSocketArray.find(
+            (item) => item.socketId === socket.id
+          );
+          if (socketId) {
+            task.stop();
+            userToSocketArray = userToSocketArray.filter(
+              (item) => item.socketId !== socket.id
+            );
+            console.log("Client disconnected");
+          }
+        });
+      }
+      if (!userToSocketArray.find((item) => item.socketId === socket.id)) {
+        userToSocketArray.push({ userId: data.userId, socketId: socket.id });
+      }
+      socket.join(roomName);
     }
   });
 });
-
-function getUserBySocketId(socketId: any) {
-  for (const [userId, id] of userToSocketMap.entries()) {
-    if (id === socketId) {
-      return userId;
-    }
-  }
-  return null;
-}
 
 sequelize
   .sync({})
@@ -86,5 +83,5 @@ sequelize
   .catch((error: any) => {
     console.log("Could not connect to DB ", error);
   });
-  
-  export { io  };
+
+export { io };
