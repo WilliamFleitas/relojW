@@ -3,7 +3,6 @@
 const { Alarm, User, AlarmAnalytic } = require("../../database");
 const { Configuration, OpenAIApi } = require("openai");
 
-// const apiKey: string = process.env.APIKEYIA as string;
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
