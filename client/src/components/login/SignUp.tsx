@@ -13,7 +13,7 @@ const logSchema = z.object({
   email: z.string().email().nonempty(),
   password: z.preprocess(
     trimString,
-    z.string().min(5, { message: "Ingresa una contraseña valida" })
+    z.string().min(5, { message: "Enter a valid password" })
   ),
 });
 type logType = z.infer<typeof logSchema>;

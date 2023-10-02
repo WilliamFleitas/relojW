@@ -16,7 +16,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://127.0.0.1:5173",
+    origin: FRONT_URL,
   },
 });
 app.use(cors());
@@ -32,7 +32,7 @@ app.use((_req: Request, res: Response, next: NextFunction) => {
   next();
 });
 app.use(cookieParser());
-app.use(express.json()); // transforma la req.body a un objeto
+app.use(express.json()); 
 
 app.use(morgan("dev"));
 
@@ -40,9 +40,7 @@ app.use("/", routes);
 let userToSocketArray: { userId: string; socketId: string }[] = [];
 
 io.on("connection", (socket) => {
-  //necesito el socket.id para desconectar solo una ventana del usuario y no todas
-  //al eliminar un userId del array de usersId se desconecta el socket
-  //tenes socket.id el cual podes
+ 
   socket.on("dataUser", async (data) => {
     if (data.userId) {
       const roomName = `user-${data.userId}`;

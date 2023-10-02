@@ -42,7 +42,7 @@ export const AlarmScreen = ({
     if(!iaVideo){
       setVideoLoading(true);
     }
-    //si iavideo no tiene nada podes meter un video de espera aca
+    
   };
  const handleStopVideo = () => {
   console.log("videoStoped");
