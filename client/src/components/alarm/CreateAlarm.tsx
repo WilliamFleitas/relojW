@@ -17,16 +17,16 @@ const AlarmSchema = z.object({
   hour: z
     .string()
     .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, {
-      message: "Ingrese una hora valida",
+      message: "Enter a valid time",
     })
-    .min(5, { message: "Ingrese una hora" })
-    .max(5, { message: "Ingrese una hora valida" }),
+    .min(5, { message: "Enter a time" })
+    .max(5, { message: "Enter a valid time" }),
   description: z.preprocess(
     trimString,
     z
       .string()
       .nonempty({ message: "Description needed" })
-      .max(60, { message: "El limite es de 60 caracteres" })
+      .max(60, { message: "60 characters max" })
   ),
 });
 
@@ -52,13 +52,13 @@ interface days {
   6: boolean;
 }
 const daysOfWeek = [
-  "Domingo",
-  "Lunes",
-  "Martes",
-  "Miercoles",
-  "Jueves",
-  "Viernes",
-  "Sabado",
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
 ];
 const customDaysObject = {
   0: false,

@@ -29,7 +29,7 @@ const Protected = ({ children }: IProtectedProps) => {
     
   }, [setDisplay]);
 
-  return <>{display ? children : <h1>Cargando..</h1> }</>;
+  return <>{display ? children : <h1>Loading..</h1> }</>;
 };
 
 export default Protected;

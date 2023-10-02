@@ -13,7 +13,7 @@ interface UserAlarmCardTypeProps {
   alarmEnableOnChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const daysOfWeek = ["D", "L", "M", "M", "J", "V", "S"];
+const daysOfWeek = ["S", "M", "T", "W", "T", "F", "S"];
 const UserAlarmCard = ({
   data,
   userId,
