@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { AlarmType } from "../../redux/alarmSlice";
 import { useAppDispatch } from "../../hooks";
 import UserAlarmCard from "./userAlarmsAssets/UserAlarmCard";

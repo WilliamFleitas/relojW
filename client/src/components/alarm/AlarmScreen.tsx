@@ -37,7 +37,6 @@ export const AlarmScreen = ({
     if (iaVideo) {
       setVideoIsPlaying(true);
       setVideoLoading(false);
-      console.log("El video se está reproduciendo");
     }
     if(!iaVideo){
       setVideoLoading(true);
@@ -52,7 +51,6 @@ export const AlarmScreen = ({
   useEffect(() => {
     if (iaVideo) {
       const blob = new Blob([iaVideo], { type: "video/mp4" });
-        console.log("iavideollegousefect");
         const url = URL.createObjectURL(blob);
         setIaVideoValue(url);
       if(!audioisPlaying){

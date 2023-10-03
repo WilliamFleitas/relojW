@@ -1,17 +1,5 @@
 {
-  "name": "api",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "dev": "ts-node-dev src/index.ts",
-    "tsc": "tsc",
-    "lint": "eslint .",
-    "start": "node build/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "OniDev",
-  "license": "ISC",
   "dependencies": {
     "@types/socket.io": "^3.0.2",
     "bcrypt": "^5.1.0",
@@ -30,14 +18,29 @@
     "sequelize": "6.30.0",
     "socket.io": "^4.6.1"
   },
+  "description": "",
   "devDependencies": {
     "@types/cookie-parser": "^1.4.3",
     "@types/express": "^4.17.17",
     "@types/jsonwebtoken": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
+    "copy-webpack-plugin": "^11.0.0",
     "eslint": "^8.38.0",
+    "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.0.4"
-  }
+  },
+  "license": "ISC",
+  "main": "index.js",
+  "name": "api",
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node-dev src/index.ts",
+    "lint": "eslint .",
+    "start": "node build/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.0"
 }

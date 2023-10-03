@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import { CreateAlarm } from "./CreateAlarm";
 import { UserAlarm } from "./UserAlarm";
 import { Chroni } from "./Chroni";
