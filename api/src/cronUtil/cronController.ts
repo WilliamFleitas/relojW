@@ -8,7 +8,6 @@ const dayjs = require("dayjs");
 export const getUserAlarms = async (userId: string) => {
   try {
     const today = dayjs().get("day");
-
     const actualHour = dayjs().format("HH:mm");
 
     const nextHour = dayjs().format("HH:mm");
@@ -26,6 +25,7 @@ export const getUserAlarms = async (userId: string) => {
       },
       raw: true,
     });
+    console.log("today", today, result, "qq", actualHour, new Date())
     return result;
   } catch (error: any) {
     console.log("error", error);
