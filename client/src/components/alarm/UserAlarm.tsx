@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getUserAlarms } from "../../redux/alarmSlice/alarmAction";
 import { IUserType } from "../../redux/userSlice";
