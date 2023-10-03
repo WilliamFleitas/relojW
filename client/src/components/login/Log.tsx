@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ChroniSignUp from "../../assets/ChroniLog2.png";
 import ChroniSignIn from "../../assets/ChroniLog.png";
 import SignUp from "./SignUp";
-import SignIn from "./SignIn";
+import SignIn from "./Signin";
 
 const Log = () => {
  

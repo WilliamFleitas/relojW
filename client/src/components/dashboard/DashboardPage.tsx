@@ -8,7 +8,8 @@ import { getUserData } from "../../redux/userSlice/userAction";
 import ModalAlarm from "../utils/ModalAlarm";
 import { AlarmScreen } from "../alarm/AlarmScreen";
 import { IUserType } from "../../redux/userSlice";
-const socket = io("http://localhost:3001");
+const BackUrl = (import.meta.env.VITE_BACK_URL as string);
+const socket = io(BackUrl);
 
 interface userDataTypes {
   data: string;
