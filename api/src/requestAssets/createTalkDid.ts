@@ -1,7 +1,7 @@
 import axios from "axios";
-const DID_API_KEY: string = process.env.DID_API_KEY?.toString() as string;
+import { io } from "../index";
 const webhook_url: string = process.env.DID_WEBHOOK_URL?.toString() as string;
-export const createTalkDid = async (promtValue: string, userId: string) => {
+export const createTalkDid = async (promtValue: string, userId: string, key: string) => {
      try {
      await axios.post(
         "https://api.d-id.com/talks",
@@ -25,12 +25,11 @@ export const createTalkDid = async (promtValue: string, userId: string) => {
           headers: {
             "Content-Type": "application/json",
             accept: "application/json",
-            Authorization: `Basic ${DID_API_KEY}`,
+            Authorization: `Basic ${key}`,
           },
         }
       );
      } catch (error: any) {
-      console.log("createTalk", error)
-      throw new Error(error)
+      io.to(`user-${userId}`).emit("createTalkError", error.response.data.description ? error.response.data.description : error.response.data.message);
      }
 };

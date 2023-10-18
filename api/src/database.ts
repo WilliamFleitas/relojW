@@ -45,6 +45,17 @@ sequelize?.models?.AlarmAnalytic?.belongsTo(sequelize?.models?.Alarm, {
   foreignKey: "alarmId",
   as: "alarm"
 })
+
+sequelize?.models?.User?.hasOne(sequelize?.models?.UserPreferences, {
+  foreignKey: "userId",
+  as: "userPreferences"
+});
+
+sequelize?.models?.UserPreferences?.belongsTo(sequelize?.models?.User, {
+  foreignKey: "userId",
+  as: "user"
+})
+
 module.exports = {
   sequelize,
   ...sequelize?.models,

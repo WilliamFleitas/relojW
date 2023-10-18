@@ -1,9 +1,12 @@
 
 import { Router, Request, Response } from "express";
+import { changeAvatarVideoValue,  } from "./controllers/userControllers";
+import { tokenValidation } from "../libs/tokenValidation";
+const {updateAvatarPreferenceValidate} = require("../validators/userValidator");
 const { Alarm, sequelize} = require("../database");
 const route = Router();
 
-route.get("/useralarm/:id", async (req: Request, res: Response) => {
+route.get("/useralarm/:id", tokenValidation, async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
   
@@ -32,9 +35,20 @@ route.get("/useralarm/:id", async (req: Request, res: Response) => {
     });
     res.status(200).send(result);
   } catch (error: any) {
-    console.log("error", error);
     res.status(400).send(error);
   }
 });
 
+
+route.put("/enableAvatar/:id",updateAvatarPreferenceValidate, async (req: Request, res: Response) => {
+  const {id} = req.params;
+  const {avatarVideo, didKey} = req.body;
+  try {
+    const result = await changeAvatarVideoValue(id, avatarVideo, didKey);
+    res.status(200).send(result);
+  } catch (error: any) {
+    res.status(400).send(`there was an error updating the preferences ${error.response}`) 
+  }
+
+});
 export default route;

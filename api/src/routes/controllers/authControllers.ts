@@ -1,5 +1,5 @@
 import { userType } from "../../typos";
-const { User } = require("../../database");
+const { User, UserPreferences, sequelize } = require("../../database");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -16,9 +16,11 @@ export const signUp = async (body: userType) => {
         password: password.toString(),
       };
 
-      const result = User.create(user);
-
+      const result = await User.create(user);
       if (result) {
+        const newUserPreferences = await UserPreferences.create({userId: result.id});
+        result.userPreferences = newUserPreferences;
+        await result.save();
         return result;
       } else {
         throw new Error("There was an error creating the user");
@@ -73,7 +75,13 @@ export const profile = async (userId: string) => {
     const user = await User.findByPk(userId, {
         attributes: {
             exclude: ['password']
-        }
+        },
+        include: [
+          {
+            model: sequelize.models.UserPreferences,
+            as: "userPreferences", 
+          },
+        ],
     });
     if(!user){
         throw new Error("The user was not found")
@@ -82,7 +90,6 @@ export const profile = async (userId: string) => {
         return user;
     }
   } catch (error: any) {
-   
     throw new Error(error.message);
   }
 };
