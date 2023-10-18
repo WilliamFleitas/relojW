@@ -7,7 +7,6 @@ interface UserAlarmStatsTypeProps {
   timesSounded: number;
   createdAt: string;
   goalDateEnd: string | null;
-  goalNotes: string[] | null;
   goalType: boolean;
 }
 const dateWeek = ["S", "M", "T", "W", "T", "F", "S"];
@@ -17,11 +16,10 @@ const UserAlarmStats = ({
   timesSounded,
   createdAt,
   goalDateEnd,
-  goalNotes,
   goalType,
 }: UserAlarmStatsTypeProps) => {
-  const createdAtFormated = dayjs(createdAt).format("DD-MMM");
-  const goalDateEndFormated = dayjs(goalDateEnd).format("MMM-DD-YY");
+  const createdAtFormated = dayjs(createdAt).format("MMM DD/YY");
+  const goalDateEndFormated = dayjs(goalDateEnd).format("MMM DD/YY");
   const totalGoalDays: string = dayjs(goalDateEnd)
     .diff(createdAt, "day")
     .toString();
@@ -33,31 +31,10 @@ const UserAlarmStats = ({
     const handleChartSwitchClick =() => {
       setChartSwitch(!chartSwitch)
     };
-  console.log(totalGoalDays, goalDaysPassed);
-
   return (
-    <div className="flex flex-row w-full h-full text-start items-center justify-between px-4 pt-8 pb-2 relative text-zinc-500">
-      <div className="flex flex-col w-full h-full text-start items-start justify-between ">
-        <div className="flex flex-row gap-x-1">
-          <label>Start Day: </label>
-          <span>{createdAtFormated}</span>
-        </div>
-        {goalType ? (
-          <>
-            <div className="flex flex-row gap-x-1">
-              <label>End Day: </label>
-              <span>{goalDateEndFormated}</span>
-            </div>
-          </>
-        ) : (
-          <></>
-        )}
-        <div className="flex flex-row gap-x-1">
-          <label>Times Sounded: </label>
-          <span>{timesSounded}</span>
-        </div>
-      </div>
-      <div className="flex flex-row w-full h-full  gap-x-2 text-start items-center justify-center">
+    <div className="flex flex-col w-full h-full text-start items-center justify-between  pt-8  relative text-zinc-500">
+     
+      <div className="flex flex-row w-full h-fit  gap-x-2 text-start items-center justify-center px-4">
           <button className="" onClick={handleChartSwitchClick}>
             <IoMdArrowDropright  className="w-6 h-6"/>
           </button>
@@ -110,7 +87,27 @@ const UserAlarmStats = ({
         ))
         }
       </div>
-
+      <div className="flex flex-row flex-wrap px-4 py-2  w-full h-fit text-start items-center justify-between mt-2  bg-[#010000]">
+        
+        {goalType ? (
+          <>
+          <div className="flex flex-col gap-x-1 text-start">
+          <label>Start</label>
+          <span>{createdAtFormated}</span>
+        </div>
+            <div className="flex flex-col gap-x-1 text-end">
+              <label>End</label>
+              <span>{goalDateEndFormated}</span>
+            </div>
+          </>
+        ) : (
+          <div className="flex flex-col gap-x-1 text-center w-full">
+          <label>Times Sounded</label>
+          <span>{timesSounded}</span>
+        </div>
+        )}
+        
+      </div>
       {goalType ? (
         <div className="absolute top-0 right-0 flex flex-row text-start items-center rounded-tr-md rounded-bl-md gap-x-1 py-1 px-2 justify-center  border border-[#2713095e] bg-zinc-900  shadow-md ">
             <label>Days: </label>

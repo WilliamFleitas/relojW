@@ -49,4 +49,21 @@ const signUserValidate = [
         validateResult(req, res, next);
     }
 ];
-module.exports = {createUserValidate, signUserValidate};
+
+const updateAvatarPreferenceValidate = [
+  check('avatarVideo').isBoolean().exists().withMessage('avatarVideo is needed'),
+  check('didKey').custom((value: any, { req }: { req: Request } ) => {
+    const avatarVideo = req.body.avatarVideo ;
+    if (avatarVideo === true && !value) {
+      throw new Error('Did Key is needed');
+    }
+    if (avatarVideo === true && typeof value !== "string") {
+      throw new Error('Did Key has to be a string');
+    }
+    return true; 
+  }),
+  (req: Request, res: Response, next: NextFunction) => {
+      validateResult(req, res, next);
+  }
+];
+module.exports = {createUserValidate, signUserValidate, updateAvatarPreferenceValidate};

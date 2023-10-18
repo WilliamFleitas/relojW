@@ -2,7 +2,7 @@
     position: relative;
     height: 250px;
     width: 250px;
-    border: 2px solid linear-gradient(#f8f8f8a9, #fbfbfba9, #efefefa9);
+    border: 2px solid linear-gradient(#1f1c1c, #1f1c1c, #1f1c1c);
     border-radius: 50%;
     animation: rotate 1.5s linear infinite;
 
@@ -12,9 +12,9 @@
     position: absolute;
     height: 250px;
     width: 250px;
-    right: 110px;
-    top: -36px;
-    background: linear-gradient(#ba5d06a9, #d37b29a9, #ba5d06a9 );
+    right: 0px;
+    top: 0px;
+    background: linear-gradient(#c17d3585, #c17d3585, #c17d3585);
     border-radius: 50%;
   }
   @media (max-width: 1024px) {

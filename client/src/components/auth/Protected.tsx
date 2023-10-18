@@ -14,7 +14,6 @@ const Protected = ({ children }: IProtectedProps) => {
     setDisplay(false)
         getUserCall()
         .then(({data}) => {
-          console.log("getuser", data);
             if(data.role === "user" || data.role === "admin"){
                 setDisplay(true);
             }else{

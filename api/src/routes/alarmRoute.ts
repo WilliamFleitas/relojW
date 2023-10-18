@@ -1,11 +1,26 @@
 import { Router, Request, Response } from "express";
-import { createAlarm } from "./controllers/alarmController";
+import { addAlarmNote, createAlarm } from "./controllers/alarmControllers";
 import { io } from "../index";
 const { Alarm} = require("../database");
 import axios from "axios";
-const { createAlarmValidate, enableAlarmValidate } = require("../validators/alarmValidator");
+const { createAlarmValidate, enableAlarmValidate, createAlarmNoteValidate } = require("../validators/alarmValidator");
 const route = Router();
 
+route.get('/getNotes/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const result = await Alarm.findByPk(id, {
+      attributes: ['goalNotes', 'goalNotesDates'],
+    });
+    if (!result) {
+      return res.status(404).json("No alarm Found");
+    }
+
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+});
 route.delete('/deleteAlarm/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
@@ -14,7 +29,6 @@ route.delete('/deleteAlarm/:id', async (req: Request, res: Response) => {
         id: id
       },
     });
-    console.log("delete",result);
     if(result === 1){
       res.status(200).json({ message: 'Alarm cleared successfully' });
     }else {
@@ -38,11 +52,24 @@ route.put("/enable/:id", enableAlarmValidate, async (req: Request, res: Response
     
     res.status(200).send("Alarm updated correctly");
   } catch (error: any) {
-    console.log(error);
     res.status(400).send(`there was an error updating the alarm ${error.response}`)
     
   }
 });
+
+route.put("/addNote/:id", createAlarmNoteValidate, async (req: Request, res: Response) => {
+  const {id} = req.params;
+  const {goalNote, goalNoteDate} = req.body;
+  try {
+    const result = await addAlarmNote(goalNote, goalNoteDate, id);
+    if(result){
+      res.status(200).send(result);
+    }
+  } catch (error: any) {
+    res.status(400).send(error.response);
+  }
+});
+
 route.post("/didWebhook", async (req: Request, res: Response) => {
   const body = req;
  
@@ -50,10 +77,7 @@ try {
   if(body.body.status === "done"){
     // const response = await axios.get(body.body.result_url, { responseType: 'stream' });
     const response = await axios.get(body.body.result_url, { responseType: 'arraybuffer' });
-    console.log("response", response, "userData", body.body.user_data);
-    console.log( "userData2", body.body);
     if(response){
-      console.log("iavideoREsultenviado")
       io.to(`user-${body.body.user_data}`).emit("iaVideoResult", response.data);
     }
     // const findAlarm = await Alarm.findByPk(body.body.user_data);
@@ -82,7 +106,6 @@ try {
   }
   res.status(200).send("ok");
 } catch (error) {
- console.log(error);
   res.status(400).send(error); 
 }
 });
@@ -97,6 +120,7 @@ route.post(
 
       res.status(200).send(result);
     } catch (error: any) {
+      
       res.status(400).send(error.message);
     }
   }

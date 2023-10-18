@@ -11,13 +11,11 @@ const route = Router();
 
 route.post("/signup", createUserValidate, async (req: Request, res: Response) => {
     const { body } = req;
-    console.log(body);
     try {
         const result = await signUp(body);
        
         res.status(200).send(result);
     } catch (error: any) {
-        console.log(error);
         res.status(500).send(error.message);
     }
 

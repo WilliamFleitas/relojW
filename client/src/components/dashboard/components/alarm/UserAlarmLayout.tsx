@@ -1,15 +1,16 @@
 import  { useState } from "react";
-import { AlarmType } from "../../redux/alarmSlice";
-import { useAppDispatch } from "../../hooks";
+import { AlarmType } from "../../../../redux/alarmSlice";
+import { useAppDispatch } from "../../../../hooks";
 import UserAlarmCard from "./userAlarmsAssets/UserAlarmCard";
 import UserAlarmStats from "./userAlarmsAssets/UserAlarmStats";
-import { AiOutlineRadarChart, AiOutlineClockCircle } from "react-icons/ai";
+import {GiStairsGoal} from "react-icons/gi";
+import {TfiAlarmClock} from "react-icons/tfi";
+import { AiOutlineRadarChart} from "react-icons/ai";
 interface UserAlarmLayoutTypeProps {
   data: AlarmType;
-  userId: string | number;
 }
 
-const UserAlarmLayout = ({ data, userId }: UserAlarmLayoutTypeProps) => {
+const UserAlarmLayout = ({ data}: UserAlarmLayoutTypeProps) => {
   const dispatch = useAppDispatch();
   const [alarmEnable, setEnableAlarm] = useState<boolean>(data.enable);
   const [statsSwitch, setStatsSwitch] = useState<boolean>(false);
@@ -20,7 +21,7 @@ const UserAlarmLayout = ({ data, userId }: UserAlarmLayoutTypeProps) => {
 
   return (
     <div
-      className={`flex flex-col relative w-full  h-full md:min-h-[120px] max-h-[120px] text-start items-center justify-between rounded-md ${
+      className={`flex flex-col relative w-full h-full  text-start items-center justify-between rounded-md ${
         alarmEnable
           ? "bg-[#673115] bg-opacity-[5%] shadow-md  "
           : "bg-[#01000062]"
@@ -34,10 +35,18 @@ const UserAlarmLayout = ({ data, userId }: UserAlarmLayoutTypeProps) => {
             type="button"
             onClick={() => handleStatsSwitchButton(false)}
           >
-            <AiOutlineClockCircle
+            {
+              data.goalType ? 
+              <GiStairsGoal
             style={{pointerEvents: "none"}}
-              className="w-4 h-4 text-[#49251F]"
+              className="w-4 h-4 text-zinc-400 z-0"
+            /> :
+            <TfiAlarmClock
+            style={{pointerEvents: "none"}}
+              className="w-4 h-4 text-zinc-400 z-0"
             />
+            }
+           
           </button>
           <button
             className={`  px-2 py-1 h-full  w-9 hover:bg-[#01000091]  text-center items-center flex flex-row justify-center rounded-tl-md  rounded-br-md ${statsSwitch ? "bg-zinc-800 " : "bg-zinc-900 "}`}
@@ -60,14 +69,13 @@ const UserAlarmLayout = ({ data, userId }: UserAlarmLayoutTypeProps) => {
           lastWeek={data.alarmAnalytic.lastWeek}
           goalType={data.goalType}
           goalDateEnd={data.goalDateEnd}
-          goalNotes={data.goalNotes}
           timesSounded={data.alarmAnalytic.timesSounded}
           createdAt={data.createdAt}
         />
       ) : (
         <UserAlarmCard
           data={data}
-          userId={userId}
+          userId={data.userId}
           alarmEnable={alarmEnable}
           alarmEnableOnChange={setEnableAlarm}
         />

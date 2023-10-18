@@ -17,17 +17,22 @@ export interface AlarmType {
     goalNotes: string[] | null;
     goalType: boolean;
     alarmAnalytic: AlarmAnalytic;
+    userId: string;
 }
 
 export interface UserStateType {
     alarmList: AlarmType[] | null;
-    loading: Boolean;
+    goalNotes: string[] | null;
+    goalNotesDates: string[] | null;
+    userAlarmsLoading: Boolean;
     error: string;
 };
 
 const initialState: UserStateType = {
     alarmList: null,
-    loading: false,
+    userAlarmsLoading: false,
+    goalNotes: null,
+    goalNotesDates: null,
     error: ""
 };
 
@@ -41,8 +46,16 @@ const AlarmSlice = createSlice({
         clearAlarmList(state){
             state.alarmList = null;
         },
+        setGoalNotes(state, action: PayloadAction<{goalNotes: string[], goalNotesDates: string[]}>){
+        state.goalNotes = action.payload.goalNotes;
+        state.goalNotesDates = action.payload.goalNotesDates;
+        },
+        clearGoalNotes(state){
+            state.goalNotes = null;
+            state.goalNotesDates = null;
+            },
         setLoadingAlarm(state, action: PayloadAction<Boolean>){
-            state.loading = action.payload
+            state.userAlarmsLoading = action.payload
         },
         setError(state, action: PayloadAction<string>){
             state.error = action.payload
@@ -54,4 +67,4 @@ const AlarmSlice = createSlice({
 });
 
 export default AlarmSlice.reducer;
-export const {setAlarmData, clearAlarmList, setLoadingAlarm, setError, clearError}= AlarmSlice.actions;
+export const {setAlarmData, clearAlarmList, setLoadingAlarm, setError, clearError, setGoalNotes, clearGoalNotes}= AlarmSlice.actions;

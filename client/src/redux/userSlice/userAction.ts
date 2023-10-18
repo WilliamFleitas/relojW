@@ -9,7 +9,8 @@ export const getUserData = () => (dispatch : AppDispatch) => {
 
     const session = JSON.parse(window.localStorage.getItem("userSession") as string);
     if(!session){
-       return Promise.reject(new Error("Inicie sesión"));
+        window.location.replace("/login");
+       return Promise.reject(new Error("Sign In"));
     }
     else {
         axios.get(`${BackUrl}/api/auth/profile`, {
@@ -17,9 +18,20 @@ export const getUserData = () => (dispatch : AppDispatch) => {
                 "auth-token":`${session}`
             }, 
         }).then(({data}) => {
-            dispatch(setDataUser({username: data.username, id: data.id, role: data.role,}))
+            dispatch(setDataUser({username: data.username, id: data.id, role: data.role, email: data.email}));
+            window.localStorage.setItem("userLanguage", data.userPreferences.language);
+            window.localStorage.setItem("avatarVideo", data.userPreferences.avatarVideo);
+            window.localStorage.setItem("didKey", data.userPreferences.didKey);
         }).catch((error: any) => {
-            console.log(error)
+            if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+                window.localStorage.removeItem("userSession");
+                dispatch(clearDataUser);
+                window.location.replace("/login");
+                return Promise.reject(new Error("No authorized"));
+              } else {
+                console.log(error)
+              }
+            
         }).finally(() => {
             dispatch(setLoadingUser(false));
         });
@@ -34,4 +46,5 @@ export const userSignOut = () => (dispatch : AppDispatch) => {
 export const changeUserSocket = (webSocket: boolean) => (dispatch : AppDispatch) => {
     dispatch(setUserSocket(webSocket));
 };
+
 

@@ -23,6 +23,6 @@ export const Typewriter = ({ text }: TypeWriterTypeProps) => {
       setVisibleText("");
     };
   }, [text]);
-  return <div style={{  height: "100%", overflow: "hidden" }} className="typewriter min-w-screen">{visibleText}</div>;
+  return <div style={{  overflow: "hidden" }} className="typewriter w-full h-full ">{visibleText}</div>;
 };
 

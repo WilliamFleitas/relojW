@@ -4,13 +4,16 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { getUserAlarms } from "../../redux/alarmSlice/alarmAction";
+import { useAppDispatch, useAppSelector } from "../../../../hooks";
+import { getUserAlarms } from "../../../../redux/alarmSlice/alarmAction";
 import dayjs from "dayjs";
-import { IUserType } from "../../redux/userSlice";
+import { IUserType } from "../../../../redux/userSlice";
 import {GiStairsGoal} from "react-icons/gi";
 import {TfiAlarmClock} from "react-icons/tfi";
 import { REPEAT_ALARM_OPTIONS } from "./AlarmLayout";
+import { socket } from "../../DashboardPage";
+import CreateAlarmSkeleton from "../../../loading/CreateAlarmSkeleton";
+
 const trimString = (u: unknown) => (typeof u === "string" ? u.trim() : u);
 
 const AlarmSchema = z.object({
@@ -94,7 +97,8 @@ export const CreateAlarm = ({ user }: CreateAlarmTypeProps) => {
     alarmHour: goalTypeSwitch ? "Goal Hour" : "Alarm Hour",
     goalDateEnd: "Goal End Date"
   }
-  const { alarmList } = useAppSelector((state) => state.alarm);
+  
+  const { alarmList, userAlarmsLoading} = useAppSelector((state) => state.alarm);
 
   const [customDays, setCustomDays] = useState<days>(customDaysObject);
   const [arrayDays, setArrayDays] = useState<number[]>([]);
@@ -175,16 +179,28 @@ export const CreateAlarm = ({ user }: CreateAlarmTypeProps) => {
     axios
       .post(`${BackUrl}/api/alarm/createalarm`, newObj)
       .then((result) => {
+        socket.emit("resetCronTask", (error: any) => {
+          if (error) {
+            console.error( error);
+          } 
+        });
+        reset();
         dispatch(getUserAlarms(user?.id as string));
       })
       .catch((err) => {
-        console.log("createalarmerror", err);
+        console.log( err);
       });
   });
 
   useEffect(()=>{
    reset()
   },[goalTypeSwitch]);
+
+  if(userAlarmsLoading){
+    return (
+     <CreateAlarmSkeleton goalTypeSwitch={goalTypeSwitch} />
+    )
+  }
   return (
     <div className=" bg-[#673115] bg-opacity-[5%]  shadow-md border border-[#2713095e] text-start items-start w-full h-fit rounded-md text-zinc-400 text-[13px] md:text-[15px] relative ">
       <form

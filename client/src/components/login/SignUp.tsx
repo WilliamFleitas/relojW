@@ -40,12 +40,10 @@ const SignUp = ({changeViewFunction}:SignUpTypeProps) => {
     axios
       .post(`${BackUrl}/api/auth/signup`, formData)
       .then(({ data }) => {
-        console.log("inicio", data);
         alert("Sign Up Correctly");
         window.location.reload();
       })
       .catch((e: any) => {
-        console.log(e)
         setLoginErrors(
           e.response?.data?.errors?.[0]
             ? e.response?.data?.errors?.[0].msg.toString()
