@@ -3,93 +3,28 @@ import { Dialog, Transition } from "@headlessui/react";
 
 interface ModalProps {
   isOpen?: boolean;
-  onClose: (value: boolean) => void ;
+  onClose: (value: boolean) => void;
   header?: React.ReactNode;
   icon?: React.ReactNode;
   Content?: JSX.Element;
   primaryButton?: React.ReactNode;
   secondaryButton?: React.ReactNode;
 }
-export default function ModalAlarm({Content, isOpen, onClose, header, icon, primaryButton, secondaryButton}:ModalProps) {
-  const [open, setOpen] = useState(false);
-
-  const cancelButtonRef = useRef(null);
-
+export default function ModalAlarm({
+  Content,
+  isOpen,
+  onClose,
+  header,
+}: ModalProps) {
   return (
-    <Transition.Root show={isOpen} as={Fragment}>
-      <Dialog
-        as="div"
-        className="relative z-10 "
-        initialFocus={cancelButtonRef}
-        onClose={onClose}
-      >
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0 bg-opacity-75 transition-opacity items-center " />
-        </Transition.Child>
-
-        <div className="fixed inset-0 z-10 overflow-y-auto ">
-          <div className="flex     items-end justify-center  text-center sm:items-center">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-              enterTo="opacity-100 translate-y-0 sm:scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-              leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            >
-              <Dialog.Panel className="relative  transform w-screen h-screen overflow-y-scroll no-scrollbar bg-gradient-to-r from-[#582823] to-[#1c1a18]   text-white transition-all flex flex-col p-10">
-                <div className="">
-                  <Dialog.Title className={"pb-2 flex flex-row text-center justify-center gap-x-2 items-center "}>
-                    
-                    <div className="hidden sm:flex bg-[#1615149a] shadow-md border border-[#b56118] rounded-md py-2 px-2 mr-auto font-medium text-[20px] ">
-                      <h2 className=" tracking-widest">{header?.toString().toUpperCase()}</h2>
-                    </div>
-                  </Dialog.Title>
-
-                  <div className="w-full h-full">
-                    {Content}
-                  </div>
-                </div>
-
-
-
-                <div className=" px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                  {
-                    primaryButton ? <button
-                    type="button"
-                    className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
-                    onClick={() => setOpen(false)}
-                  >
-                    Deactivate
-                  </button> : <></>
-                  }
-                  
-                  {
-                    secondaryButton ?  <button
-                    type="button"
-                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                    onClick={() => setOpen(false)}
-                    ref={cancelButtonRef}
-                  >
-                    Cancel
-                  </button> : <></>
-                  }
-                 
-                </div>
-              </Dialog.Panel>
-            </Transition.Child>
-          </div>
-        </div>
-      </Dialog>
-    </Transition.Root>
-  );
+  <div>
+  {
+    
+  true ? 
+    <div className="w-full h-screen absolute z-50 top-0 left-0">
+    {Content}
+    </div> : <></>
+  }
+  </div>
+  )
 }

@@ -4,6 +4,7 @@ export interface IUserType {
     username: string;
     id: string;
     role: string;
+    email: string;
 }
 
 export interface UserStateType {

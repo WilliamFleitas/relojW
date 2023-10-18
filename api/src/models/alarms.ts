@@ -50,6 +50,12 @@ module.exports = (sequelize: any) => {
       goalNotes: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
+        defaultValue: []
+      },
+      goalNotesDates: {
+        type: DataTypes.ARRAY(DataTypes.DATE),
+        allowNull: true,
+        defaultValue: []
       },
     },
     

@@ -16,6 +16,11 @@ export interface alarmType {
     alarmType: string;
     iaMessage: string;
     iaVideo: Blob;
+    goalType: boolean;
+    goalDateEnd?: string;
+    goalNotes?: string[];
+    goalNotesDates?: number[];
+    createdAt: string;
 }
 
 export interface ServerToClientEvents {

@@ -1,38 +1,34 @@
 import React, { useEffect } from "react";
-import {  useNavigate } from "react-router-dom";
+import {  Link, useNavigate } from "react-router-dom";
 import {TfiAlarmClock, TfiTimer} from "react-icons/tfi";
 import {RxTimer} from "react-icons/rx";
-import {GiClockwork} from "react-icons/gi";
-import {AiOutlineLogout} from "react-icons/ai";
+import {AiOutlineLogout, AiTwotoneSetting} from "react-icons/ai";
 import { useAppDispatch } from "../../hooks";
 import { userSignOut } from "../../redux/userSlice/userAction";
 const navBarOptions = [
   {
     label: "Alarm",
     value: "alarm",
+    link: "/dashboard/alarm",
     id:0,
     Icon: TfiAlarmClock,
   },
-  {
-    label: "Timer",
-    value: "timer",
-    id:1,
-    Icon: RxTimer,
-  },
-  {
-    label: "Chronometer",
-    value: "chronometer",
-    id:2,
-    Icon: TfiTimer,
-  }
-  ,
-  {
-    label: "Clock",
-    value: "clock",
-    id:3,
-    Icon: GiClockwork,
-  }
-]
+  // {
+  //   label: "Timer",
+  //   value: "timer",
+  //   link: "/alarm",
+  //   id:1,
+  //   Icon: RxTimer,
+  // },
+  // {
+  //   label: "Chronometer",
+  //   value: "chronometer",
+  //   link: "/alarm",
+  //   id:2,
+  //   Icon: TfiTimer,
+  // }
+  
+];
 const NavBar = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -41,23 +37,25 @@ const NavBar = () => {
   navigate('/login');
   };
   return (
-    <div className="flex flex-row lg:flex-col text-start items-center justify-between text-zinc-300 w-full lg:h-screen px-4 lg:px-0 py-2 lg:py-0 z-10">
+    <div className="flex flex-row lg:flex-col text-start items-center justify-between text-zinc-300 w-full lg:h-screen  lg:px-0  lg:py-0 z-20">
      <div className="hidden lg:flex lg:flex-col  text-start items-center justify-center  w-full h-full min-h-[130px] max-h-[130px] text-zinc-300 ">
       <h2 className="w-fit h-fit p-1 rounded-md  bg-zinc-800 ">ONIONI</h2>
      </div>
-      <div className="flex flex-row lg:flex-col  w-full text-start items-center justify-between h-fit lg:gap-y-8">
+      <div className="flex flex-row lg:flex-col  w-full  lg:w-full text-start items-center justify-center h-fit lg:gap-y-8">
         {navBarOptions?.map((option) => (
-          <button className="lg:hover:bg-[#2201016f] hover:text-zinc-600   w-full text-center flex items-center justify-center h-full lg:py-6 " type="button" key={option.id}>
+          <Link to={option.link} className="hover:bg-[#2201016f] hover:text-zinc-600 px-6 lg:px-0 min-h-[50px] lg:min-h-fit min-w-[80px] fh:min-w-[150px] lg:min-w-fit  lg:w-full text-center flex items-center justify-center h-full lg:py-6 "  key={option.id}>
             <option.Icon className="w-full min-w-6 max-w-6 h-full min-h-6 max-h-6"/>
-          </button>
+          </Link>
         ))}
       </div>
-
-      <div className=" hidden lg:flex lg:flex-col w-full h-full max-h-[90px] text-start items-end justify-between mt-auto   text-zinc-600   hover:bg-[#2201016f]">
-        <button className="w-full h-full flex text-start items-center justify-center" type="button" onClick={() => handleSignOutClick()}><AiOutlineLogout className="w-6 h-6 "/></button>
+      
+      <div className="flex flex-row border-l lg:border-l-0 border-zinc-800 justify-between lg:flex-col w-fit lg:w-full h-fit mt-auto gap-4 lg:gap-0">
+      <div className="flex flex-col w-fit lg:w-full h-full  text-start items-end lg:items-center justify-between   text-zinc-600   hover:bg-[#2201016f]">
+        <Link to={"/dashboard/settings"}  className="w-full h-full flex text-start items-center justify-center px-6 lg:px-0 min-h-[50px] lg:min-h-[90px]"><AiTwotoneSetting className="w-6 h-6 "/></Link>
       </div >
-      <div className="lg:hidden">
-        <button className="w-4 h-4 py-4 px-4 my-1 flex rounded-full  bg-[#2201016f]  text-center items-center justify-center ">icon</button>
+      <div className="flex flex-col w-fit lg:w-full h-full  text-start items-end justify-between   text-zinc-600   hover:bg-[#2201016f]">
+        <button className="w-full h-full flex text-start items-center justify-center px-6 lg:px-0 min-h-[50px] lg:min-h-[90px]" type="button" onClick={() => handleSignOutClick()}><AiOutlineLogout className="w-6 h-6 "/></button>
+      </div >  
       </div>
     </div>
   );

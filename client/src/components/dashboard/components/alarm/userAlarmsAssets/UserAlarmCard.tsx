@@ -1,10 +1,10 @@
-import { AlarmType } from "../../../redux/alarmSlice";
+import { AlarmType } from "../../../../../redux/alarmSlice";
 import { IoClose } from "react-icons/io5";
 import {
   deleteAlarm,
   updateEnableAlarm,
-} from "../../../redux/alarmSlice/alarmAction";
-import { useAppDispatch } from "../../../hooks";
+} from "../../../../../redux/alarmSlice/alarmAction";
+import { useAppDispatch } from "../../../../../hooks";
 import { REPEAT_ALARM_OPTIONS } from "../AlarmLayout";
 interface UserAlarmCardTypeProps {
   data: AlarmType;
@@ -39,8 +39,8 @@ const UserAlarmCard = ({
     <div className="flex flex-col   w-full h-full">
       <div className="flex flex-row h-full w-full text-start items-start justify-between px-1 py-1 gap-x-2">
         <div className="flex flex-row gap-x-6  text-start items-start justify-between h-full w-full p-3">
-          <h2 className=" font-bold text-[15px]  w-full h-full max-h-14  no-scrollbar mt-3">
-            {data.description}
+          <h2 className=" font-bold text-[15px]  w-full h-full max-h-14  no-scrollbar mt-4">
+            "{data.description}"
           </h2>
           <h3 className="font-bold text-[35px] text-zinc-500">
             {data.hour.slice(0, 5)}

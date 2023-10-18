@@ -36,10 +36,19 @@ const createAlarmValidate = [
     }
 ];
 
+const createAlarmNoteValidate = [
+  check('goalNote').exists().isString().isLength({ min: 5, max: 40 })
+  .withMessage('Min length 5, max length 40'),
+  check('goalNoteDate').exists().isString()
+  .withMessage('Insert Goal Note Date'),
+  (req: Request, res: Response, next: NextFunction) => {
+    validateResult(req, res, next);
+}
+];
 const enableAlarmValidate = [
   check('enable').trim().isBoolean().withMessage('Must be a boolean true or false'),
   (req: Request, res: Response, next: NextFunction) => {
       validateResult(req, res, next);
   }
 ];
-module.exports = {createAlarmValidate, enableAlarmValidate};
+module.exports = {createAlarmValidate, enableAlarmValidate, createAlarmNoteValidate};
