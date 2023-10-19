@@ -112,9 +112,9 @@ export const forEachAlarmFunction = (
             goalDaysPassed + 2
           } of ${totalGoalDays} of this endeavor, craft a response that resonates with the sentiment conveyed in the goal description. Your response may include words of congratulations, advice, celebration, support, or comfort, depending on the user's goal. Make the interaction engaging and share a fascinating fact or tidbit related to the user's goal.`
         : `Imagine you are a personal assistant, and your task is to inform the user about an upcoming alarm. You'll be given "${alarm.description}" as the cause for the alarm and "${alarm.hour}" as the set alarm time. Begin by crafting a creatively engaging comment about the purpose of this alarm. For example, if the alarm is related to eating, you might say something like, '12:00 PM is the classic lunch hour, or it's a popular time for a snack.' Then, follow up with an insightful comment about the chosen alarm time, discussing typical activities or events that occur during that hour. Wrap up your response by recommending a random song from the top 50 charts that perfectly complements the user's intended activity. Ensure that the song genre aligns with the activity. If the alarm reason is in Spanish, respond in Spanish; otherwise, respond in English. Use only these two languages.`;
-
+        let response ;
       try {
-        const response = await openai.createCompletion({
+        response = await openai.createCompletion({
           model: "text-davinci-003",
           prompt: gptPrompt,
           temperature: 1,
@@ -123,23 +123,35 @@ export const forEachAlarmFunction = (
           frequency_penalty: 0,
           presence_penalty: 0,
         });
+      } catch (error: any) {
+        console.log(error);
+      }
+      const AlarmUpdateObj = alarm.alarmType === "once" ? {
+        enable: false,
+        iaMessage:
+          response && response.data.choices[0].text
+            ? response.data.choices[0].text
+            : customAlarmOnGptFailed,
+      } : {
+        iaMessage:
+          response && response.data.choices[0].text
+            ? response.data.choices[0].text
+            : customAlarmOnGptFailed,
+      }
+      try {
         await Alarm.update(
-          {
-            enable: alarm.alarmType === "once" ? false : true,
-            iaMessage:
-              response && response.data.choices[0].text
-                ? response.data.choices[0].text
-                : customAlarmOnGptFailed,
-          },
+          AlarmUpdateObj,
           {
             where: {
               id: alarm.id,
             },
           }
         );
-      } catch (error: any) {
-        throw new Error(error);
+      } catch (error) {
+        console.log(error);
       }
+        
+      
     }, hourToMiliseconds);
   });
 };
