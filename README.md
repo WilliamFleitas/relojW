@@ -63,8 +63,8 @@ Características Clave
 Video Avatar: Si se proporciona una D-id key (una clave de habilitación para la API de D-id), la aplicación puede responder con videos del avatar generados por IA. Este avatar utiliza la respuesta en texto generada por la API de ChatGPT para ofrecer una experiencia visual más entretenida.
 
 Capturas de Pantalla
-Alarm Panel: [https://i.imgur.com/vAKZLZa.pn]
-ALARM Screen: [https://i.imgur.com/UZYOTZA.png]
+Alarm Panel: https://i.imgur.com/vAKZLZa.png
+ALARM Screen: https://i.imgur.com/UZYOTZA.png
 
 Requisitos
 Asegúrese de tener instalado lo siguiente:
