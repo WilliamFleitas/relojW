@@ -21,7 +21,7 @@ const UserAlarmLayout = ({ data}: UserAlarmLayoutTypeProps) => {
 
   return (
     <div
-      className={`flex flex-col relative w-full h-full  text-start items-center justify-between rounded-md ${
+      className={`flex flex-col relative w-full h-fit  text-start items-center justify-between rounded-md ${
         alarmEnable
           ? "bg-[#673115] bg-opacity-[5%] shadow-md  "
           : "bg-[#01000062]"
