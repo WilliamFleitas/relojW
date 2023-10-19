@@ -6,6 +6,7 @@ export default {
     extend: {},
     screens: {
       'fh': '400px',
+      // => @media (min-width: 400px) { ... }
       'sm': '640px',
       // => @media (min-width: 640px) { ... }
 
