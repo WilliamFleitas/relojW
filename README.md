@@ -54,7 +54,7 @@ If you have any questions or need assistance, you can contact via email at will-
 
 ####################################################################################################################################################################
 
-Reloj wAi
+Alarm Clock 
 
 Este repositorio contiene el código fuente de una aplicación Reloj de Alarma inteligente desarrollada con typescript y el stack PERN (PostgreSQL, Express, React y Node.js). La aplicación permite a los usuarios configurar alarmas de una manera interactiva y única. La funcionalidad principal de la aplicación incluye la gestión de alarmas con razones personalizadas, recomendaciones de actividades basadas en la razón de la alarma y la capacidad de generar un avatar video generado por IA utilizando la API de D-id.
 
