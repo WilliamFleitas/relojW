@@ -1,4 +1,4 @@
-wAi Clock 
+Alarm Clock 
 
 This repository contains the source code for an Alarm clock application developed with TypeScript and the PERN stack (PostgreSQL, Express, React, and Node.js). The application allows users to configure alarms in an interactive and unique way. The main functionality of the application includes managing alarms with custom reasons, activity recommendations based on the alarm reason, and the ability to generate an AI avatar video using the D-id API.
 
